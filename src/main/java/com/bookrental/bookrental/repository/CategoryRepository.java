@@ -1,0 +1,7 @@
+package com.bookrental.bookrental.repository;
+
+import com.bookrental.bookrental.model.Category;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CategoryRepository extends JpaRepository<Category, Integer> {
+}

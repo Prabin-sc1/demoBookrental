@@ -1,7 +1,8 @@
 package com.bookrental.bookrental.service.member;
 
+import com.bookrental.bookrental.Exception.AppException;
 import com.bookrental.bookrental.model.Member;
-import com.bookrental.bookrental.pojo.MemberRequestPojo;
+import com.bookrental.bookrental.pojo.member.MemberRequestPojo;
 import com.bookrental.bookrental.repository.MemberRepository;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +24,8 @@ public class MemberServiceImpl implements MemberService {
         }
         try {
             beanUtils.copyProperties(member, memberRequestPojo);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new AppException(e.getMessage(), e);
         }
         memberRepository.save(member);
     }

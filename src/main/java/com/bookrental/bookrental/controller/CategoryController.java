@@ -1,0 +1,34 @@
+package com.bookrental.bookrental.controller;
+
+import com.bookrental.bookrental.pojo.category.CategoryRequestPojo;
+import com.bookrental.bookrental.pojo.category.CategoryResponsePojo;
+import com.bookrental.bookrental.pojo.member.MemberRequestPojo;
+import com.bookrental.bookrental.service.category.CategoryService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/category")
+public class CategoryController {
+    private CategoryService categoryService;
+
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
+
+    @PostMapping
+    public ResponseEntity<CategoryRequestPojo> createMember(@Valid @RequestBody CategoryRequestPojo categoryRequestPojo) {
+        this.categoryService.createUpdateCateogory(categoryRequestPojo);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CategoryResponsePojo>> getAllCategory() {
+        this.categoryService.getAllCategory();
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+}

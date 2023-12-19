@@ -1,6 +1,6 @@
 package com.bookrental.bookrental.service.member;
 
-import com.bookrental.bookrental.pojo.MemberRequestPojo;
+import com.bookrental.bookrental.pojo.member.MemberRequestPojo;
 
 import java.util.List;
 

@@ -1,7 +1,8 @@
 package com.bookrental.bookrental.controller;
 
-import com.bookrental.bookrental.pojo.MemberRequestPojo;
+import com.bookrental.bookrental.pojo.member.MemberRequestPojo;
 import com.bookrental.bookrental.service.member.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,16 +16,9 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    // create
     @PostMapping
     public ResponseEntity<MemberRequestPojo> createMember(@RequestBody MemberRequestPojo memberRequestPojo) {
         this.memberService.createMember(memberRequestPojo);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
-    @GetMapping("/home")
-    public String home() {
-        return "ho fasfs me";
-    }
-
 }

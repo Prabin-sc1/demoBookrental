@@ -1,4 +1,4 @@
-package com.bookrental.bookrental.pojo;
+package com.bookrental.bookrental.pojo.book;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

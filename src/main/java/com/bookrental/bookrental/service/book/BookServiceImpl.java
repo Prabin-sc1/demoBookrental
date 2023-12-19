@@ -1,6 +1,6 @@
 package com.bookrental.bookrental.service.book;
 
-import com.bookrental.bookrental.pojo.BookRequestPojo;
+import com.bookrental.bookrental.pojo.book.BookRequestPojo;
 import org.springframework.stereotype.Service;
 
 @Service
