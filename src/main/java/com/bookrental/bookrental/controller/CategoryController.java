@@ -1,5 +1,7 @@
 package com.bookrental.bookrental.controller;
 
+import com.bookrental.bookrental.model.Category;
+import com.bookrental.bookrental.pojo.GlobalApiResponse;
 import com.bookrental.bookrental.pojo.category.CategoryRequestPojo;
 import com.bookrental.bookrental.pojo.category.CategoryResponsePojo;
 import com.bookrental.bookrental.pojo.member.MemberRequestPojo;
@@ -27,8 +29,18 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryResponsePojo>> getAllCategory() {
-        this.categoryService.getAllCategory();
+    public ResponseEntity<List<Category>> getAllCategory() {
+        return ResponseEntity.ok(this.categoryService.getAllCategory());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Category> getCategoryById(@PathVariable Integer id) {
+        return ResponseEntity.ok(this.categoryService.getCategoryById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Category> deleteCategoryById(@PathVariable Integer id) {
+        this.categoryService.deleteCategory(id);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

@@ -20,4 +20,3 @@ server:
   port: 9889
   servlet:
     context-path: /book-rental
-

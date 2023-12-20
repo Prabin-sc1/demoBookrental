@@ -1,13 +1,16 @@
 package com.bookrental.bookrental.service.category;
 
 import com.bookrental.bookrental.Exception.AppException;
+import com.bookrental.bookrental.config.CustomMessageSource;
+import com.bookrental.bookrental.constants.ModuleNameConstants;
+import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.mapper.CategoryMapper;
 import com.bookrental.bookrental.model.Category;
 import com.bookrental.bookrental.pojo.category.CategoryRequestPojo;
-import com.bookrental.bookrental.pojo.category.CategoryResponsePojo;
 import com.bookrental.bookrental.repository.CategoryRepository;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
@@ -16,8 +19,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
-    private final CategoryMapper categoryMapper;
+//
+//    @Autowired
+//    private final CategoryMapper categoryMapper;
+
     private final CategoryRepository categoryRepository;
+    private CustomMessageSource customMessageSource;
     private final NullAwareBeanUtilsBean beanUtils = new NullAwareBeanUtilsBean();
 
     @Override
@@ -35,18 +42,22 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryRequestPojo getCategoryById(Integer id) {
-        return null;
+    public Category getCategoryById(Integer id) {
+        Category c = this.categoryRepository.findById(id).orElseThrow(() -> new AppException(customMessageSource.
+                get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.CATEGORY)));
+        return c;
     }
 
     @Override
-    public List<CategoryResponsePojo> getAllCategory() {
-        return this.categoryMapper.getAllCategory();
+    public List<Category> getAllCategory() {
+//        return this.categoryMapper.getAllCategory();
+        List<Category> l1 = this.categoryRepository.findAll();
+        return l1;
     }
-
 
     @Override
     public void deleteCategory(Integer id) {
-
+        this.categoryRepository.deleteById(id);
     }
 }
+

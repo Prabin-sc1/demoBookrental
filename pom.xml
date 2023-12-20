@@ -82,13 +82,12 @@
         </dependency>
 
 
-        <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.mybatis/mybatis &ndash;&gt;-->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
             <version>3.5.15</version>
         </dependency>
-
 
     </dependencies>
 
