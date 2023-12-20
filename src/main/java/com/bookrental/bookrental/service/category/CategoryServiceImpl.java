@@ -43,16 +43,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category getCategoryById(Integer id) {
-        Category c = this.categoryRepository.findById(id).orElseThrow(() -> new AppException(customMessageSource.
+        return this.categoryRepository.findById(id).orElseThrow(() -> new AppException(customMessageSource.
                 get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.CATEGORY)));
-        return c;
     }
 
     @Override
     public List<Category> getAllCategory() {
 //        return this.categoryMapper.getAllCategory();
-        List<Category> l1 = this.categoryRepository.findAll();
-        return l1;
+        return this.categoryRepository.findAll();
     }
 
     @Override
@@ -60,4 +58,3 @@ public class CategoryServiceImpl implements CategoryService {
         this.categoryRepository.deleteById(id);
     }
 }
-
