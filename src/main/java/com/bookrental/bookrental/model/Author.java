@@ -24,6 +24,6 @@ public class Author {
     private String email;
     private String mobileNumber;
 //
-//    @ManyToMany(fetch = )
-//    private List<Book> = new ArrayList<>();
+//    @ManyToMany(mappedBy = "authors")
+//    private List<Book> book = new ArrayList<>();
 }

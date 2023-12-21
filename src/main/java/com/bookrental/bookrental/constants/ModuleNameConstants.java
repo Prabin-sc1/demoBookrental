@@ -5,4 +5,7 @@ public class ModuleNameConstants {
     public static final String CATEGORY = "Category";
 
     public static final String AUTHOR = "Author";
+
+
+    public static final String BOOK = "Book";
 }

@@ -2,6 +2,7 @@ package com.bookrental.bookrental.controller;
 
 import com.bookrental.bookrental.model.Author;
 import com.bookrental.bookrental.pojo.author.AuthorRequestPojo;
+import com.bookrental.bookrental.pojo.author.AuthorResponsePojo;
 import com.bookrental.bookrental.service.author.AuthorService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -27,12 +28,12 @@ public class AuthorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Author>> getAll() {
+    public ResponseEntity<List<AuthorResponsePojo>> getAll() {
         return ResponseEntity.ok(this.authorService.getAllAuthor());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Author> getAll(@PathVariable Integer id) {
+    public ResponseEntity<AuthorResponsePojo> getAuthor(@PathVariable Integer id) {
         return ResponseEntity.ok(this.authorService.getAuthorById(id));
     }
 
@@ -42,8 +43,4 @@ public class AuthorController {
         return null;
     }
 
-    @GetMapping("/home")
-    public String home() {
-        return "home";
-    }
 }

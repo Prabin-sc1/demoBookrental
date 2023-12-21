@@ -9,7 +9,7 @@ import java.util.List;
 public interface CategoryService {
     void createUpdateCateogory(CategoryRequestPojo crp);
 
-    Category getCategoryById(Integer id);
+    CategoryResponsePojo getCategoryById(Integer id);
 
 //    List<Category> getAllCategory();
 

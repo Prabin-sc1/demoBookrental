@@ -23,9 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
-
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 //
 //    @Autowired
 //    private final CategoryMapper categoryMapper;
@@ -49,10 +47,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getCategoryById(Integer id) {
+    public CategoryResponsePojo getCategoryById(Integer id) {
 //        return this.categoryRepository.findById(id).orElseThrow(() -> new AppException(customMessageSource.
 //                get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.CATEGORY)));
-        return this.categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category", " Id ", id));
+        Category c = this.categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category", " Id ", id));
+        return this.modelMapper.map(c, CategoryResponsePojo.class);
     }
 
     @Override
