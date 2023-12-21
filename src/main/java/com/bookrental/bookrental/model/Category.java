@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -17,7 +20,11 @@ public class Category {
     @SequenceGenerator(name = "category_seq_gen", sequenceName = "category_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_seq_gen")
     private Integer id;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String name;
+    @Column(nullable = false, length = 1000)
     private String description;
+//
+//    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<Book> bookList = new ArrayList<>();
 }

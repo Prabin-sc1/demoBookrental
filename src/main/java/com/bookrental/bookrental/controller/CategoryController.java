@@ -1,5 +1,6 @@
 package com.bookrental.bookrental.controller;
 
+import com.bookrental.bookrental.model.Author;
 import com.bookrental.bookrental.model.Category;
 import com.bookrental.bookrental.pojo.GlobalApiResponse;
 import com.bookrental.bookrental.pojo.category.CategoryRequestPojo;
@@ -23,24 +24,27 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryRequestPojo> createMember(@Valid @RequestBody CategoryRequestPojo categoryRequestPojo) {
-        this.categoryService.createUpdateCateogory(categoryRequestPojo);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<Void> createMember(@Valid @RequestBody CategoryRequestPojo categoryRequestPojo) {
+        categoryService.createUpdateCateogory(categoryRequestPojo);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+//        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Category>> getAllCategory() {
-        return ResponseEntity.ok(this.categoryService.getAllCategory());
+    public ResponseEntity<List<CategoryResponsePojo>> getAllCategory() {
+        return ResponseEntity.ok(categoryService.getAllCategory());
     }
+
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Integer id) {
-        return ResponseEntity.ok(this.categoryService.getCategoryById(id));
+        return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Category> deleteCategoryById(@PathVariable Integer id) {
-        this.categoryService.deleteCategory(id);
+        categoryService.deleteCategory(id);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
