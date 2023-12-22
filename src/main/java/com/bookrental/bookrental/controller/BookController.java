@@ -1,6 +1,5 @@
 package com.bookrental.bookrental.controller;
 
-import com.bookrental.bookrental.model.Book;
 import com.bookrental.bookrental.pojo.book.BookRequestPojo;
 import com.bookrental.bookrental.pojo.book.BookResponsePojo;
 import com.bookrental.bookrental.service.book.BookService;
@@ -23,7 +22,7 @@ public class BookController {
     @PostMapping
     public ResponseEntity<BookRequestPojo> create(@Valid @RequestBody BookRequestPojo bookRequestPojo) {
         this.bookService.createUpdateBook(bookRequestPojo);
-        return new ResponseEntity<BookRequestPojo>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

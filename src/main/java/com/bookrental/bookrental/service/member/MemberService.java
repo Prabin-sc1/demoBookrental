@@ -1,12 +1,13 @@
 package com.bookrental.bookrental.service.member;
 
 import com.bookrental.bookrental.pojo.member.MemberRequestPojo;
+import com.bookrental.bookrental.pojo.member.MemberResponsePojo;
 
 import java.util.List;
 
 public interface MemberService {
     void createMember(MemberRequestPojo member);
-    MemberRequestPojo getMemberById(Integer id);
-    List<MemberRequestPojo> getALlMember();
+    MemberResponsePojo getMemberById(Integer id);
+    List<MemberResponsePojo> getAllMember();
     void deleteMember(Integer id);
 }

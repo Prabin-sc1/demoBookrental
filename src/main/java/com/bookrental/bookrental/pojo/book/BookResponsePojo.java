@@ -1,6 +1,7 @@
 package com.bookrental.bookrental.pojo.book;
 
-import lombok.AllArgsConstructor;
+import com.bookrental.bookrental.model.Author;
+import com.bookrental.bookrental.pojo.author.AuthorResponsePojo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +12,6 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class BookResponsePojo {
     private Integer id;
     private String name;
@@ -22,5 +22,5 @@ public class BookResponsePojo {
     private LocalDate publishedDate;
     private String photo;
     private Integer categoryId;
-    private List<Integer> authorId;
+    private List<Author> authors;
 }
