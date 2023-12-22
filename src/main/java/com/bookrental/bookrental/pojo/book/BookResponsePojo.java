@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookRequestPojo {
+public class BookResponsePojo {
     private Integer id;
     private String name;
     private Integer noOfPages;

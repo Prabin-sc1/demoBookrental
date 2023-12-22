@@ -8,7 +8,4 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book, Integer> {
-//   List<Book> findByAuthor(Author author);
-//   List<Book> findByCategory(Author author);
-
 }

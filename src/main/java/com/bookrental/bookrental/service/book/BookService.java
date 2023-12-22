@@ -2,20 +2,17 @@ package com.bookrental.bookrental.service.book;
 
 import com.bookrental.bookrental.model.Book;
 import com.bookrental.bookrental.pojo.book.BookRequestPojo;
+import com.bookrental.bookrental.pojo.book.BookResponsePojo;
 
 import java.util.List;
 
 public interface BookService {
-    void createUpdateBook(BookRequestPojo book, Integer cid);
+    void createUpdateBook(BookRequestPojo book);
 
     void deleteBook(Integer id);
 
-    List<Book> getAllBook();
+    List<BookResponsePojo> getAllBook();
 
-    Book getBook(Integer id);
-
-    List<Book> getAllBookByCategory(Integer categoryId);
-
-    List<Book> getAllBookByAuthor(Integer authorId);
+    BookResponsePojo getBook(Integer id);
 
 }

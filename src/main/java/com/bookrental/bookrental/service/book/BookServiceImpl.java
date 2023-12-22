@@ -9,6 +9,7 @@ import com.bookrental.bookrental.model.Author;
 import com.bookrental.bookrental.model.Book;
 import com.bookrental.bookrental.model.Category;
 import com.bookrental.bookrental.pojo.book.BookRequestPojo;
+import com.bookrental.bookrental.pojo.book.BookResponsePojo;
 import com.bookrental.bookrental.repository.AuthorRepository;
 import com.bookrental.bookrental.repository.BookRepository;
 import com.bookrental.bookrental.repository.CategoryRepository;
@@ -36,10 +37,9 @@ public class BookServiceImpl implements BookService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public void createUpdateBook(BookRequestPojo book, Integer cid) {
+    public void createUpdateBook(BookRequestPojo book) {
         List<Author> authors;
-//      Author a = this.authorRepository.findById(aid).orElseThrow(() -> new ResourceNotFoundException("Author","Id",aid));
-        Category c = this.categoryRepository.findById(cid).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", cid));
+//        Category c = this.categoryRepository.findById(cid).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", cid));
         Book b = new Book();
 
         if (book.getId() != null) {
@@ -51,94 +51,33 @@ public class BookServiceImpl implements BookService {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new AppException(e.getMessage(), e);
         }
-       authors = book.getAuthorId().stream().map(e -> authorRepository.findById(e).orElseThrow(() -> new ResourceNotFoundException("Author", "Id", 1))).collect(Collectors.toList());
+
+        //get category id
+        Integer cidd = book.getCategoryId();
+        Category cc = this.categoryRepository.findById(cidd).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", cidd));
+
+        authors = book.getAuthorId().stream().map(e -> authorRepository.findById(e).orElseThrow(() -> new ResourceNotFoundException("Author", "Id", 1))).collect(Collectors.toList());
         b.setAuthors(authors);
-        b.setCategory(c);
+        b.setCategory(cc);
         bookRepository.save(b);
     }
 
     @Override
     public void deleteBook(Integer id) {
+        bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "Id", id));
         bookRepository.deleteById(id);
     }
 
     @Override
-    public List<Book> getAllBook() {
-        return bookRepository.findAll();
+    public List<BookResponsePojo> getAllBook() {
+        List<Book> l = bookRepository.findAll();
+        return l.stream().map(e -> this.modelMapper.map(e, BookResponsePojo.class)).collect(Collectors.toList());
     }
 
     @Override
-    public Book getBook(Integer id) {
-        return bookRepository.findById(id).orElseThrow(() -> new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.BOOK)));
+    public BookResponsePojo getBook(Integer id) {
+//        Book b = bookRepository.findById(id).orElseThrow(() -> new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.BOOK)));
+        Book b = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "Id", id));
+        return this.modelMapper.map(b, BookResponsePojo.class);
     }
-
-    @Override
-    public List<Book> getAllBookByCategory(Integer categoryId) {
-        return null;
-    }
-
-    @Override
-    public List<Book> getAllBookByAuthor(Integer authorId) {
-        return null;
-    }
-
-  /*  @Override
-    public BookResponse addBook(String data) throws IllegalStateException, IOException {
-        Book book;
-        Category category;
-        List<Author> authors;
-
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        BookRequest bookRequest = objectMapper.readValue(data, BookRequest.class);
-
-        if (bookRequest.getId() != null)
-            book = bookRepo.findById(bookRequest.getId()).orElse(new Book());
-
-        try {
-            category = categoryRepo.findById(bookRequest.getCategoryId()).get();
-        } catch (NoSuchElementException e) {
-            throw new DoesNotExistException((bookRequest.getCategoryId()).toString(), "categoryId");
-        }
-
-        authors = bookRequest.getAuthorId().stream().map(aLong -> authorRepo.findById(aLong)
-                        .orElseThrow(() -> new DoesNotExistException(aLong.toString(), "AuthorId")))
-                .collect(Collectors.toList());
-
-
-        //images
-        File fileSaveDir = new File("C:\\Users\\Admin\\Desktop\\testPic");
-        if (!fileSaveDir.exists()) {
-            fileSaveDir.mkdirs();
-        }
-
-        String imageDirectory = fileSaveDir + File.separator + getRegisterFileName(file, (bookRequest.getIsbn()).toString());
-
-
-        bookRequest.setPhoto(imageDirectory);
-
-
-        book = modelMapper.map(bookRequest, Book.class);
-
-        book.setRating(0.0);
-
-        book.setCategoryId(category);
-        book.setAuthors(authors);
-
-        BookResponse response = modelMapper.map(bookRepo.save(book), BookResponse.class);
-
-        //uploading file to the path
-        file.transferTo(new File(imageDirectory));
-
-
-        response.setCategory(modelMapper.map(category, CategoryResponse.class));
-
-        List<AuthorResponse> authorResponses = authors.stream().map(e -> modelMapper.map(e, AuthorResponse.class))
-                .collect(Collectors.toList());
-        response.setAuthors(authorResponses);
-
-        return response;
-    }
-*/
 }
