@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Setter
 @Getter
@@ -20,4 +21,10 @@ public class BookRequestPojo {
     private Integer stockCount;
     private LocalDate publishedDate;
     private String photo;
+
+//    private Integer categoryId;
+
+    private List<Integer> authorId;
+
+
 }

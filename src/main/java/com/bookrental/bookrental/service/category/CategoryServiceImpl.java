@@ -3,9 +3,6 @@ package com.bookrental.bookrental.service.category;
 import com.bookrental.bookrental.Exception.AppException;
 import com.bookrental.bookrental.Exception.ResourceNotFoundException;
 import com.bookrental.bookrental.config.CustomMessageSource;
-import com.bookrental.bookrental.constants.ModuleNameConstants;
-import com.bookrental.bookrental.enums.Message;
-import com.bookrental.bookrental.mapper.CategoryMapper;
 import com.bookrental.bookrental.model.Category;
 import com.bookrental.bookrental.pojo.category.CategoryRequestPojo;
 import com.bookrental.bookrental.pojo.category.CategoryResponsePojo;
@@ -13,7 +10,6 @@ import com.bookrental.bookrental.repository.CategoryRepository;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;

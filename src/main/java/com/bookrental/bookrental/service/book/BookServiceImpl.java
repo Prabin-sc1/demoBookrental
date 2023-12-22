@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +37,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void createUpdateBook(BookRequestPojo book, Integer cid) {
-//        Author a = this.authorRepository.findById(aid).orElseThrow(() -> new ResourceNotFoundException("Author","Id",aid));
+        List<Author> authors;
+//      Author a = this.authorRepository.findById(aid).orElseThrow(() -> new ResourceNotFoundException("Author","Id",aid));
         Category c = this.categoryRepository.findById(cid).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", cid));
         Book b = new Book();
 
@@ -49,7 +51,8 @@ public class BookServiceImpl implements BookService {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new AppException(e.getMessage(), e);
         }
-//        b.setAuthors(null);
+       authors = book.getAuthorId().stream().map(e -> authorRepository.findById(e).orElseThrow(() -> new ResourceNotFoundException("Author", "Id", 1))).collect(Collectors.toList());
+        b.setAuthors(authors);
         b.setCategory(c);
         bookRepository.save(b);
     }
@@ -78,4 +81,64 @@ public class BookServiceImpl implements BookService {
     public List<Book> getAllBookByAuthor(Integer authorId) {
         return null;
     }
+
+  /*  @Override
+    public BookResponse addBook(String data) throws IllegalStateException, IOException {
+        Book book;
+        Category category;
+        List<Author> authors;
+
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        BookRequest bookRequest = objectMapper.readValue(data, BookRequest.class);
+
+        if (bookRequest.getId() != null)
+            book = bookRepo.findById(bookRequest.getId()).orElse(new Book());
+
+        try {
+            category = categoryRepo.findById(bookRequest.getCategoryId()).get();
+        } catch (NoSuchElementException e) {
+            throw new DoesNotExistException((bookRequest.getCategoryId()).toString(), "categoryId");
+        }
+
+        authors = bookRequest.getAuthorId().stream().map(aLong -> authorRepo.findById(aLong)
+                        .orElseThrow(() -> new DoesNotExistException(aLong.toString(), "AuthorId")))
+                .collect(Collectors.toList());
+
+
+        //images
+        File fileSaveDir = new File("C:\\Users\\Admin\\Desktop\\testPic");
+        if (!fileSaveDir.exists()) {
+            fileSaveDir.mkdirs();
+        }
+
+        String imageDirectory = fileSaveDir + File.separator + getRegisterFileName(file, (bookRequest.getIsbn()).toString());
+
+
+        bookRequest.setPhoto(imageDirectory);
+
+
+        book = modelMapper.map(bookRequest, Book.class);
+
+        book.setRating(0.0);
+
+        book.setCategoryId(category);
+        book.setAuthors(authors);
+
+        BookResponse response = modelMapper.map(bookRepo.save(book), BookResponse.class);
+
+        //uploading file to the path
+        file.transferTo(new File(imageDirectory));
+
+
+        response.setCategory(modelMapper.map(category, CategoryResponse.class));
+
+        List<AuthorResponse> authorResponses = authors.stream().map(e -> modelMapper.map(e, AuthorResponse.class))
+                .collect(Collectors.toList());
+        response.setAuthors(authorResponses);
+
+        return response;
+    }
+*/
 }
