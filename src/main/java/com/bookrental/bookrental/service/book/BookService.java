@@ -11,8 +11,8 @@ public interface BookService {
 
     void deleteBook(Integer id);
 
-    List<BookResponsePojo> getAllBook();
+    List<BookResponsePojo> getAllBooks();
 
-    BookResponsePojo getBook(Integer id);
+    BookResponsePojo getBookById(Integer id);
 
 }

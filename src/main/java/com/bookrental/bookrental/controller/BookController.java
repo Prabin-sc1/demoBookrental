@@ -33,12 +33,12 @@ public class BookController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BookResponsePojo> getById(@PathVariable Integer id) {
-        return ResponseEntity.ok(this.bookService.getBook(id));
+        return ResponseEntity.ok(this.bookService.getBookById(id));
     }
 
     @GetMapping
     public ResponseEntity<List<BookResponsePojo>> getAll() {
-        return ResponseEntity.ok(this.bookService.getAllBook());
+        return ResponseEntity.ok(this.bookService.getAllBooks());
     }
 
 }

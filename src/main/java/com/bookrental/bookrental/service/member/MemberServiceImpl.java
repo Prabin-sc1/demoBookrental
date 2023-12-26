@@ -38,19 +38,19 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberResponsePojo getMemberById(Integer id) {
-        Member m = this.memberRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Member", "Id", id));
-        return this.modelMapper.map(m, MemberResponsePojo.class);
+        Member m = memberRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Member", "Id", id));
+        return modelMapper.map(m, MemberResponsePojo.class);
     }
 
     @Override
     public List<MemberResponsePojo> getAllMember() {
-        List<Member> l = this.memberRepository.findAll();
-        return l.stream().map(e -> modelMapper.map(l, MemberResponsePojo.class)).collect(Collectors.toList());
+        List<Member> l = memberRepository.findAll();
+        return l.stream().map(e -> modelMapper.map(e, MemberResponsePojo.class)).collect(Collectors.toList());
     }
 
     @Override
     public void deleteMember(Integer id) {
-        this.memberRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Member", "Id", id));
-        this.memberRepository.deleteById(id);
+        memberRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Member", "Id", id));
+        memberRepository.deleteById(id);
     }
 }

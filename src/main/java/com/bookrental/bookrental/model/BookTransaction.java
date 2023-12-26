@@ -1,5 +1,6 @@
 package com.bookrental.bookrental.model;
 
+import com.bookrental.bookrental.enums.RentType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,14 +24,17 @@ public class BookTransaction {
     private String code;
     private LocalDate fromDate;
     private LocalDate toDate;
-    private Boolean rentStatus;
     private Boolean activeClosed;
+
+    @Column(name = "rent_status")
+    @Enumerated(EnumType.STRING)
+    private RentType rentStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false, referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_booktransaction_member"))
-    private Member memberId;
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", nullable = false, referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_booktransaction_book"))
-    private Book bookId;
+    private Book book;
 }

@@ -3,8 +3,7 @@ package com.bookrental.bookrental.service.book;
 import com.bookrental.bookrental.Exception.AppException;
 import com.bookrental.bookrental.Exception.ResourceNotFoundException;
 import com.bookrental.bookrental.config.CustomMessageSource;
-import com.bookrental.bookrental.constants.ModuleNameConstants;
-import com.bookrental.bookrental.enums.Message;
+import com.bookrental.bookrental.mapper.BookMapper;
 import com.bookrental.bookrental.model.Author;
 import com.bookrental.bookrental.model.Book;
 import com.bookrental.bookrental.model.Category;
@@ -14,7 +13,6 @@ import com.bookrental.bookrental.repository.AuthorRepository;
 import com.bookrental.bookrental.repository.BookRepository;
 import com.bookrental.bookrental.repository.CategoryRepository;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -27,6 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
+    private final BookMapper bookMapper;
     private final BookRepository bookRepository;
     private final ModelMapper modelMapper;
     private final NullAwareBeanUtilsBean utilsBean = new NullAwareBeanUtilsBean();
@@ -39,7 +38,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public void createUpdateBook(BookRequestPojo book) {
         List<Author> authors;
-//        Category c = this.categoryRepository.findById(cid).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", cid));
         Book b = new Book();
 
         if (book.getId() != null) {
@@ -69,15 +67,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookResponsePojo> getAllBook() {
-        List<Book> l = bookRepository.findAll();
-        return l.stream().map(e -> modelMapper.map(e, BookResponsePojo.class)).collect(Collectors.toList());
+    public List<BookResponsePojo> getAllBooks() {
+        return bookMapper.getAllBook();
     }
 
+
     @Override
-    public BookResponsePojo getBook(Integer id) {
-//        Book b = bookRepository.findById(id).orElseThrow(() -> new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.BOOK)));
-        Book b = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "Id", id));
-        return this.modelMapper.map(b, BookResponsePojo.class);
+    public BookResponsePojo getBookById(Integer id) {
+        return bookMapper.getBookById(id);
     }
 }

@@ -7,7 +7,6 @@ import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.model.Author;
 import com.bookrental.bookrental.pojo.author.AuthorRequestPojo;
 import com.bookrental.bookrental.pojo.author.AuthorResponsePojo;
-import com.bookrental.bookrental.pojo.category.CategoryResponsePojo;
 import com.bookrental.bookrental.repository.AuthorRepository;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ public class AuthorServiceImpl implements AuthorService {
     // just because i don't put final keyword before AuthorRepository it is giving me error
     private NullAwareBeanUtilsBean beanUtils = new NullAwareBeanUtilsBean();
 
-    private CustomMessageSource customMessageSource;
+    private final CustomMessageSource customMessageSource;
 
     private final ModelMapper modelMapper;
 
