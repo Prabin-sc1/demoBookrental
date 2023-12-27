@@ -45,7 +45,7 @@ public class BookTransactionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<BookTransaction> delete(@PathVariable("id") Integer id) {
         bookTransactionService.deleteTransactionById(id);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     @GetMapping("/member/{id}")
     public ResponseEntity<List<BookTransactionResponse>> getAllTransactionByMemberId(@PathVariable("id") Integer id) {

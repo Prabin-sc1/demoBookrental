@@ -9,8 +9,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class BookReturnResponse {
     private Member member;
     private Book book;

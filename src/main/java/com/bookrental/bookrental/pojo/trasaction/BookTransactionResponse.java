@@ -16,8 +16,6 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class BookTransactionResponse {
     private Integer id;
     private String code;

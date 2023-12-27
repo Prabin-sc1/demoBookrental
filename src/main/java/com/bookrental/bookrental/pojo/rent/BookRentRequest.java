@@ -9,8 +9,6 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class BookRentRequest {
     private Integer id;
     private LocalDate fromDate;
