@@ -36,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
         try {
             beanUtils.copyProperties(category, crp);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new AppException(e.getMessage(), e);
+            throw new AppException(e.getMessage());
         }
         categoryRepository.save(category);
     }

@@ -47,7 +47,7 @@ public class BookServiceImpl implements BookService {
         try {
             utilsBean.copyProperties(b, book);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new AppException(e.getMessage(), e);
+            throw new AppException(e.getMessage());
         }
 
         //get category id
@@ -70,7 +70,6 @@ public class BookServiceImpl implements BookService {
     public List<BookResponsePojo> getAllBooks() {
         return bookMapper.getAllBook();
     }
-
 
     @Override
     public BookResponsePojo getBookById(Integer id) {

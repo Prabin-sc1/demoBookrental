@@ -6,12 +6,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse> resourceNotFoundExceptionHandler(ResourceNotFoundException e) {
-        String message = e.getMessage();
+//        String message = e.getMessage();
         ApiResponse a = new ApiResponse(e.getMessage(), false);
-        return new ResponseEntity<ApiResponse>(a, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(a, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(BookStockException.class)
+    public Map<String, String> handleBusinessException(BookStockException b) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("errorMessage", b.getMessage());
+        return errorMap;
     }
 }

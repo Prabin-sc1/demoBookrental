@@ -13,10 +13,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class BookRentRequest {
     private Integer id;
-    private String code;
     private LocalDate fromDate;
     private LocalDate toDate;
-    private Boolean activeClosed;
     private Integer bookId;
     private Integer memberId;
 }

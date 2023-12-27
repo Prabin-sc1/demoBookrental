@@ -38,7 +38,7 @@ public class AuthorServiceImpl implements AuthorService {
         try {
             beanUtils.copyProperties(author, authorRequestPojo);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new AppException(e.getMessage(), e);
+            throw new AppException(e.getMessage());
         }
         authorRepository.save(author);
 

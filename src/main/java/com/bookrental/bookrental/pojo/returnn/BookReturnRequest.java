@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,4 +15,6 @@ public class BookReturnRequest {
     private Integer id;
     private String code;
     private Integer memberId;
+    private Integer bookId;
+    private LocalDate toDate;
 }

@@ -31,7 +31,7 @@ public class MemberServiceImpl implements MemberService {
         try {
             beanUtils.copyProperties(member, memberRequestPojo);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new AppException(e.getMessage(), e);
+            throw new AppException(e.getMessage());
         }
         memberRepository.save(member);
     }

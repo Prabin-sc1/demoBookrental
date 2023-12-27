@@ -35,8 +35,6 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getAllCategory());
     }
 
-
-
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponsePojo> getCategoryById(@PathVariable Integer id) {
         return ResponseEntity.ok(categoryService.getCategoryById(id));

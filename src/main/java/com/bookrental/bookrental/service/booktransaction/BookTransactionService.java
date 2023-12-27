@@ -12,7 +12,13 @@ import java.util.List;
 public interface BookTransactionService {
     void addBookTransaction(BookRentRequest bookRentRequest);
 
-    BookReturnResponse returnBookTransaction(BookReturnRequest bookReturnRequest);
+    void returnBookTransaction(BookReturnRequest bookReturnRequest);
 
     List<BookTransactionResponse> getAllTransaction();
+
+    BookTransactionResponse getSingleTransactionById(Integer id);
+
+    void deleteTransactionById(Integer id);
+
+   List<BookTransactionResponse> getAllTransactionByMember(Integer id);
 }
