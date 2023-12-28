@@ -2,6 +2,7 @@ package com.bookrental.bookrental.service.booktransaction;
 
 import com.bookrental.bookrental.Exception.AppException;
 import com.bookrental.bookrental.Exception.BookStockException;
+import com.bookrental.bookrental.Exception.MemberOutstandingRentalsException;
 import com.bookrental.bookrental.Exception.ResourceNotFoundException;
 import com.bookrental.bookrental.enums.RentType;
 import com.bookrental.bookrental.mapper.BookTransactionMapper;
@@ -10,7 +11,6 @@ import com.bookrental.bookrental.model.BookTransaction;
 import com.bookrental.bookrental.model.Member;
 import com.bookrental.bookrental.pojo.rent.BookRentRequest;
 import com.bookrental.bookrental.pojo.returnn.BookReturnRequest;
-import com.bookrental.bookrental.pojo.returnn.BookReturnResponse;
 import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
 import com.bookrental.bookrental.repository.BookRepository;
 import com.bookrental.bookrental.repository.BookTransactionRepository;
@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -54,6 +53,12 @@ public class BookTransactionServiceImpl implements BookTransactionService {
         int b = bookRentRequest.getBookId();
         Book book = bookRepository.findById(b).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", b));
         Member member = memberRepository.findById(a).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", a));
+
+        List<BookTransaction> outstandingResults = bookTransactionMapper.findTransactionByMemberAndRestStatus(member.getId(), "RENT");
+        if (!outstandingResults.isEmpty()) {
+            throw new MemberOutstandingRentalsException("Member has already rented this book, so can't rent another same book.");
+        }
+
         bookTransaction.setRentStatus(RentType.RENT);
         bookTransaction.setMember(member);
         bookTransaction.setBook(book);
@@ -90,9 +95,9 @@ public class BookTransactionServiceImpl implements BookTransactionService {
         book.setStockCount(b.getStockCount() + 1);
         bookRepository.save(book);
         returnBookTransaction.setActiveClosed(false);
+        bookTransactionMapper.update(memberId);
         bookTransactionRepository.save(returnBookTransaction);
     }
-
 
     @Override
     public List<BookTransactionResponse> getAllTransaction() {

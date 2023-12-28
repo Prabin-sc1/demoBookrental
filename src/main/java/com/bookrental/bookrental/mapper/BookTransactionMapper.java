@@ -1,5 +1,6 @@
 package com.bookrental.bookrental.mapper;
 
+import com.bookrental.bookrental.model.BookTransaction;
 import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -19,5 +20,24 @@ public interface BookTransactionMapper {
     @Select("select tbt.id ,tbt.code ,tbt.from_date as fromDate, tbt.to_date as toDate, tbt.book_id as bookId, tbt.member_id as memberId, " +
             "tbt.rent_status as rentStatus from tbl_book_transaction tbt where member_id = #{id}")
     List<BookTransactionResponse> getAllTransactionByMemberId(@Param("id") Integer id);
+
+    @Select("\n" +
+            "select\n" +
+            "\ttbt.id,\n" +
+            "\ttbt.code,\n" +
+            "\ttbt.from_date,\n" +
+            "\ttbt.to_date,\n" +
+            "\ttbt.book_id as bookId,\n" +
+            "\ttbt.member_id as memberId,\n" +
+            "\ttbt.rent_status as rentStatus\n" +
+            "from\n" +
+            "\ttbl_book_transaction tbt\n" +
+            "   where member_id = #{id} and rent_status = #{rentStatus} ")
+    List<BookTransaction> findTransactionByMemberAndRestStatus(@Param("id") Integer id, @Param("rentStatus") String rentStatus);
+
+    @Select("  UPDATE tbl_book_transaction\n" +
+            "SET rent_status = 'RETURN'\n" +
+            "WHERE member_id = #{id} and rent_status ='RENT'")
+   BookTransaction update(@Param("id") Integer id);
 }
 

@@ -18,8 +18,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(a, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(BookStockException.class)
-    public Map<String, String> handleBusinessException(BookStockException b) {
+    @ExceptionHandler({BookStockException.class, MemberOutstandingRentalsException.class})
+    public Map<String, String> handleBusinessException(Exception b) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("errorMessage", b.getMessage());
         return errorMap;
