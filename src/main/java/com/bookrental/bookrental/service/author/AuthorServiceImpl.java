@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
-    // just because i don't put final keyword before AuthorRepository it is giving me error
     private NullAwareBeanUtilsBean beanUtils = new NullAwareBeanUtilsBean();
 
     private final CustomMessageSource customMessageSource;

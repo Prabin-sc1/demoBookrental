@@ -20,3 +20,9 @@ server:
   port: 9889
   servlet:
     context-path: /book-rental
+
+security:
+  user:
+    name: prabin
+    password: prabin
+
