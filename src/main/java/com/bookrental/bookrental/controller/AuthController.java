@@ -17,11 +17,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
     private final UserDetailsService userDetailsService;
 
     private final AuthenticationManager manager;
-
 
     private final JwtHelper helper;
 
@@ -59,12 +57,10 @@ public class AuthController {
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException(" Invalid Username or Password  !!");
         }
-
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public String exceptionHandler() {
         return "Credentials Invalid !!";
     }
-
 }
