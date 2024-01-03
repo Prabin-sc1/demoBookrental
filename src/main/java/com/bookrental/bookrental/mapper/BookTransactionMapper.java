@@ -21,27 +21,8 @@ public interface BookTransactionMapper {
             "tbt.rent_status as rentStatus from tbl_book_transaction tbt where member_id = #{id}")
     List<BookTransactionResponse> getAllTransactionByMemberId(@Param("id") Integer id);
 
-    @Select("\n" +
-            "select\n" +
-            "\ttbt.id,\n" +
-            "\ttbt.code,\n" +
-            "\ttbt.from_date,\n" +
-            "\ttbt.to_date,\n" +
-            "\ttbt.book_id as bookId,\n" +
-            "\ttbt.member_id as memberId,\n" +
-            "\ttbt.rent_status as rentStatus\n" +
-            "from\n" +
-            "\ttbl_book_transaction tbt\n" +
-            "   where member_id = #{id} and rent_status = #{rentStatus} ")
-    List<BookTransaction> findTransactionByMemberAndRestStatus(@Param("id") Integer id, @Param("rentStatus") String rentStatus);
-
-    @Select("  UPDATE tbl_book_transaction\n" +
-            "SET rent_status = 'RETURN'\n" +
-            "WHERE member_id = #{id} and rent_status ='RENT'")
-   BookTransaction update(@Param("id") Integer id);
-// only select
-    // update
-
+    @Select("SELECT COUNT(*) FROM tbl_book_transaction WHERE member_id = #{id} AND rent_status = #{rentStatus}")
+    int countTransactionsByMemberAndRentStatus(@Param("id") int memberId, @Param("rentStatus") String rentStatus);
 
     @Select("SELECT\n" +
             "    tbt.id,\n" +

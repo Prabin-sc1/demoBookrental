@@ -6,6 +6,7 @@ import com.bookrental.bookrental.pojo.returnn.BookReturnRequest;
 import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
 import com.bookrental.bookrental.schedular.OverdueBookEmailScheduler;
 import com.bookrental.bookrental.service.booktransaction.BookTransactionService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class BookTransactionController {
     }
 
     @PostMapping("/rent")
-    public ResponseEntity<BookTransaction> createTransaction(@RequestBody BookRentRequest bookRentRequest) {
+    public ResponseEntity<BookTransaction> createTransaction(@RequestBody @Valid BookRentRequest bookRentRequest) {
         bookTransactionService.addBookTransaction(bookRentRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

@@ -1,9 +1,6 @@
 package com.bookrental.bookrental.service.booktransaction;
 
-import com.bookrental.bookrental.exception.AppException;
-import com.bookrental.bookrental.exception.BookStockException;
-import com.bookrental.bookrental.exception.MemberOutstandingRentalsException;
-import com.bookrental.bookrental.exception.ResourceNotFoundException;
+import com.bookrental.bookrental.exception.*;
 import com.bookrental.bookrental.enums.RentType;
 import com.bookrental.bookrental.mapper.BookTransactionMapper;
 import com.bookrental.bookrental.model.Book;
@@ -16,9 +13,12 @@ import com.bookrental.bookrental.repository.BookRepository;
 import com.bookrental.bookrental.repository.BookTransactionRepository;
 import com.bookrental.bookrental.repository.MemberRepository;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
@@ -55,13 +55,12 @@ public class BookTransactionServiceImpl implements BookTransactionService {
         int a = bookRentRequest.getMemberId();
         int b = bookRentRequest.getBookId();
 
-
         Book book = bookRepository.findById(b).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", b));
         Member member = memberRepository.findById(a).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", a));
 
-        List<BookTransaction> outstandingResults = bookTransactionMapper.findTransactionByMemberAndRestStatus(member.getId(), "RENT");
-        if (!outstandingResults.isEmpty()) {
-            throw new MemberOutstandingRentalsException("Member has already rented this book, so can't rent another same book.");
+        int overdewBooks = bookTransactionMapper.countTransactionsByMemberAndRentStatus(member.getId(), "RENT");
+        if (overdewBooks > 0) {
+            throw new MemberOverdewRentalException("Member has already rented this book, so can't rent another same book.");
         }
 
         bookTransaction.setFromDate(LocalDate.now());
@@ -69,48 +68,45 @@ public class BookTransactionServiceImpl implements BookTransactionService {
         bookTransaction.setRentStatus(RentType.RENT);
         bookTransaction.setMember(member);
         bookTransaction.setBook(book);
-        bookTransaction.setCode("#" + a + "RENT" + b);
+        bookTransaction.setCode("#RENT");
 
-        Book book1 = bookRepository.findById(b).get();
-
-        book1.setStockCount(book1.getStockCount() - 1);
+//        Book book1 = bookRepository.findById(b).get();
+        book.setStockCount(book.getStockCount() - 1);
         bookTransaction.setActiveClosed(true);
 
-        if (book1.getStockCount() < 1)
+        if (book.getStockCount() < 1)
             throw new BookStockException("Sorry, we are out of stock!");
         else
-            bookRepository.save(book1);
+            bookRepository.save(book);
         bookTransactionRepository.save(bookTransaction);
     }
 
     @Override
-    public void returnBookTransaction(BookReturnRequest bookReturnRequest) {
-        BookTransaction returnBookTransaction = new BookTransaction();
-        if (bookReturnRequest.getId() != null && bookReturnRequest.getCode() != null && bookReturnRequest.getMemberId() != null) {
-            returnBookTransaction = bookTransactionRepository.findById(bookReturnRequest.getId()).orElse(returnBookTransaction);
-        }
+    public void returnBookTransaction(@Valid @RequestBody BookReturnRequest bookReturnRequest) {
+        BookTransaction bookTransaction = findBookTransaction(bookReturnRequest);
+        updateBookStockCount(bookReturnRequest.getBookId());
+        updateBookTransaction(bookTransaction);
+    }
 
-        try {
-            beanUtils.copyProperties(returnBookTransaction, bookReturnRequest);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new AppException(e.getMessage());
-        }
+    private BookTransaction findBookTransaction(BookReturnRequest bookReturnRequest) {
+        return bookTransactionRepository.findByCodeAndMemberIdAndBookId(
+                bookReturnRequest.getCode(),
+                bookReturnRequest.getMemberId(),
+                bookReturnRequest.getBookId()
+        ).orElseThrow(() -> new InvalidTransactionStateException("Invalid code, member ID, or book ID"));
+    }
 
-        int memberId = bookReturnRequest.getMemberId();
-        int bookId = bookReturnRequest.getBookId();
-
-        Member m = memberRepository.findById(memberId).orElseThrow(() -> new ResourceNotFoundException("Member", "Id", memberId));
-        Book b = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book", "Id", bookId));
-
-        returnBookTransaction.setRentStatus(RentType.RETURN);
-        returnBookTransaction.setMember(m);
-        returnBookTransaction.setBook(b);
-        Book book = bookRepository.findById(bookId).get();
-        book.setStockCount(b.getStockCount() + 1);
+    private void updateBookStockCount(Integer id) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "Id", id));
+        book.setStockCount(book.getStockCount() + 1);
         bookRepository.save(book);
-        returnBookTransaction.setActiveClosed(false);
-        bookTransactionMapper.update(memberId);
-        bookTransactionRepository.save(returnBookTransaction);
+    }
+
+    private void updateBookTransaction(BookTransaction bookTransaction) {
+        bookTransaction.setToDate(LocalDate.now());
+        bookTransaction.setRentStatus(RentType.RETURN);
+        bookTransaction.setActiveClosed(true);
+        bookTransactionRepository.save(bookTransaction);
     }
 
     @Override
