@@ -1,13 +1,12 @@
 package com.bookrental.bookrental.service.user;
 
-import com.bookrental.bookrental.Exception.AppException;
+import com.bookrental.bookrental.exception.AppException;
 import com.bookrental.bookrental.model.User;
 import com.bookrental.bookrental.pojo.user.UserRequestPojo;
 import com.bookrental.bookrental.pojo.user.UserResponsePojo;
 import com.bookrental.bookrental.repository.UserRepository;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

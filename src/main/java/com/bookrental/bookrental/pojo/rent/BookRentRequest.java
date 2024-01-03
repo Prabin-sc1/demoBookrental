@@ -1,18 +1,15 @@
 package com.bookrental.bookrental.pojo.rent;
 
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
 public class BookRentRequest {
     private Integer id;
-    private LocalDate fromDate;
-    private LocalDate toDate;
+//    @NotNull(message = "Book ID can't be null")
     private Integer bookId;
+//    @NotNull(message = "Member ID can't be null")
     private Integer memberId;
 }

@@ -1,7 +1,7 @@
 package com.bookrental.bookrental.service.category;
 
-import com.bookrental.bookrental.Exception.AppException;
-import com.bookrental.bookrental.Exception.ResourceNotFoundException;
+import com.bookrental.bookrental.exception.AppException;
+import com.bookrental.bookrental.exception.ResourceNotFoundException;
 import com.bookrental.bookrental.config.CustomMessageSource;
 import com.bookrental.bookrental.mapper.CategoryMapper;
 import com.bookrental.bookrental.model.Category;

@@ -39,5 +39,24 @@ public interface BookTransactionMapper {
             "SET rent_status = 'RETURN'\n" +
             "WHERE member_id = #{id} and rent_status ='RENT'")
    BookTransaction update(@Param("id") Integer id);
+// only select
+    // update
+
+
+    @Select("SELECT\n" +
+            "    tbt.id,\n" +
+            "    tbt.code,\n" +
+            "    tbt.from_date,\n" +
+            "    tbt.to_date,\n" +
+            "    tbt.book_id AS bookId,\n" +
+            "    tbt.member_id AS memberId,\n" +
+            "    tbt.rent_status AS rentStatus\n" +
+            "FROM\n" +
+            "    tbl_book_transaction tbt\n" +
+            "WHERE\n" +
+            "    tbt.to_date < CURRENT_DATE and rent_status ='RENT'\n" +
+            "ORDER BY\n" +
+            "    from_date")
+    List<BookTransactionResponse> overdeuList();
 }
 

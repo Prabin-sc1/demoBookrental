@@ -1,4 +1,4 @@
-package com.bookrental.bookrental.Exception;
+package com.bookrental.bookrental.exception;
 
 import lombok.Getter;
 import lombok.Setter;

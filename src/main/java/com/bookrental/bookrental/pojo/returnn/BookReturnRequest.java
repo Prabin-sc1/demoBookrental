@@ -9,7 +9,6 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class BookReturnRequest {
     private Integer id;
     private String code;

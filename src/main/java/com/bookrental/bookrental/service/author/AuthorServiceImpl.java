@@ -1,6 +1,6 @@
 package com.bookrental.bookrental.service.author;
 
-import com.bookrental.bookrental.Exception.AppException;
+import com.bookrental.bookrental.exception.AppException;
 import com.bookrental.bookrental.config.CustomMessageSource;
 import com.bookrental.bookrental.constants.ModuleNameConstants;
 import com.bookrental.bookrental.enums.Message;

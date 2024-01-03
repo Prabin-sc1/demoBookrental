@@ -1,4 +1,4 @@
-package com.bookrental.bookrental.Exception;
+package com.bookrental.bookrental.exception;
 
 public class MemberOutstandingRentalsException extends AppException {
 

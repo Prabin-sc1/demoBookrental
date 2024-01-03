@@ -1,6 +1,6 @@
 package com.bookrental.bookrental.helpers;
 
-import com.bookrental.bookrental.model.BookTransaction;
+import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -14,11 +14,10 @@ import java.util.List;
 
 public class Helper {
 
-    public static String[] HEADERS = {"ID", "Code", "From Date", "To Date"};
-
+    public static String[] HEADERS = {"ID", "Code", "From Date", "To Date", "Book Id", "Member Id", "Rent Status"};
     public static String SHEET_NAME = "book-transaction";
 
-    public static ByteArrayInputStream dataToExcel(List<BookTransaction> list) throws IOException {
+    public static ByteArrayInputStream dataToExcel(List<BookTransactionResponse> list) throws IOException {
 
         // create work book
 
@@ -38,30 +37,26 @@ public class Helper {
             // create column : values
 
             int rowIndex = 1;
-            for (BookTransaction b : list) {
-
+            for (BookTransactionResponse b : list) {
                 Row dataRow = sheet.createRow(rowIndex);
                 rowIndex++;
                 dataRow.createCell(0).setCellValue(b.getId());
                 dataRow.createCell(1).setCellValue(b.getCode());
                 dataRow.createCell(2).setCellValue(b.getFromDate());
                 dataRow.createCell(3).setCellValue(b.getToDate());
-//                dataRow.createCell(0).setCellValue(b.getMember());
+                dataRow.createCell(4).setCellValue(b.getBookId());
+                dataRow.createCell(5).setCellValue(b.getMemberId());
+                dataRow.createCell(6).setCellValue(String.valueOf(b.getRentStatus()));
             }
-
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
-
         } catch (Exception e) {
             e.printStackTrace();
             return null;
-        }
-        finally {
+        } finally {
             workbook.close();
             out.close();
         }
 //        return new ByteArrayInputStream(out.toByteArray());
-
     }
-
 }

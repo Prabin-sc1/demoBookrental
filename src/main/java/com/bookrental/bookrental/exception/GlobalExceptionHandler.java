@@ -1,4 +1,4 @@
-package com.bookrental.bookrental.Exception;
+package com.bookrental.bookrental.exception;
 
 import com.bookrental.bookrental.payloads.ApiResponse;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,6 @@ import java.util.Map;
 public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse> resourceNotFoundExceptionHandler(ResourceNotFoundException e) {
-//        String message = e.getMessage();
         ApiResponse a = new ApiResponse(e.getMessage(), false);
         return new ResponseEntity<>(a, HttpStatus.NOT_FOUND);
     }

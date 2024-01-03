@@ -1,7 +1,7 @@
 package com.bookrental.bookrental.service.member;
 
-import com.bookrental.bookrental.Exception.AppException;
-import com.bookrental.bookrental.Exception.ResourceNotFoundException;
+import com.bookrental.bookrental.exception.AppException;
+import com.bookrental.bookrental.exception.ResourceNotFoundException;
 import com.bookrental.bookrental.model.Member;
 import com.bookrental.bookrental.pojo.member.MemberRequestPojo;
 import com.bookrental.bookrental.pojo.member.MemberResponsePojo;
