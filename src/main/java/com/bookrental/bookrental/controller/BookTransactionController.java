@@ -58,9 +58,9 @@ public class BookTransactionController {
         return ResponseEntity.ok(bookTransactionService.getAllTransactionByMember(id));
     }
 
-//    @GetMapping("/overdeu")
-//    public ResponseEntity<String> triggerOverdueEmails() {
+    @GetMapping("/overdeu")
+    public ResponseEntity<String> triggerOverdueEmails() {
 //        scheduler.triggerOverdueEmailsManually();
-//        return ResponseEntity.ok("Overdue emails triggered manually.");
-//    }
+        return ResponseEntity.ok("Overdue emails triggered manually.");
+    }
 }

@@ -1,25 +1,22 @@
 package com.bookrental.bookrental.schedular;
 
 import com.bookrental.bookrental.mapper.BookTransactionMapper;
-import com.bookrental.bookrental.model.BookTransaction;
 import com.bookrental.bookrental.model.Member;
 import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
 import com.bookrental.bookrental.repository.MemberRepository;
-import com.bookrental.bookrental.service.email.EmailService;
+import com.bookrental.bookrental.service.email.NewEmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class OverdueBookEmailScheduler {
 
     private final BookTransactionMapper bookTransactionMapper;
-    private final EmailService emailService;
+    private final NewEmailService emailService;
 
     private final MemberRepository memberRepository;
 
@@ -39,7 +36,12 @@ public class OverdueBookEmailScheduler {
             String message = "Dear " + bookTransaction.getMemberId() + " ,\n\n" + " This is reminder that the book with the code " + bookTransaction.getBookId()
                     + " is overdeu. Please return ASAP. ";
             String emailMember = m.getEmail();
-            emailService.sendTo(emailMember, subject, message);
+            try {
+                emailService.sendEmail(emailMember, subject, message);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
         }
     }
 

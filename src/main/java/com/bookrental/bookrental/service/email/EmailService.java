@@ -1,3 +1,4 @@
+/*
 package com.bookrental.bookrental.service.email;
 
 import jakarta.mail.*;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 import java.util.Properties;
 @Service
 public class EmailService {
-    // apache commons EmailService
 
     public boolean sendTo(String to, String subject, String message) {
 
@@ -61,4 +61,4 @@ public class EmailService {
 
     }
 
-}
+}*/

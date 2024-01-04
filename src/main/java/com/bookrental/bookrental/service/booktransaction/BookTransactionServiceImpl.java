@@ -15,13 +15,13 @@ import com.bookrental.bookrental.repository.MemberRepository;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +35,7 @@ public class BookTransactionServiceImpl implements BookTransactionService {
     private final NullAwareBeanUtilsBean beanUtils = new NullAwareBeanUtilsBean();
 
     private final BookTransactionMapper bookTransactionMapper;
+    private final Random r = new Random();
 
 
     @Override
@@ -65,7 +66,7 @@ public class BookTransactionServiceImpl implements BookTransactionService {
         bookTransaction.setRentStatus(RentType.RENT);
         bookTransaction.setMember(member);
         bookTransaction.setBook(book);
-        bookTransaction.setCode("#RENT");// unique
+        bookTransaction.setCode("#"+r.nextInt());
         book.setStockCount(book.getStockCount() - 1);
         bookTransaction.setActiveClosed(true);
 
