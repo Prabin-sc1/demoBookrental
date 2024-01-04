@@ -1,7 +1,7 @@
 package com.bookrental.bookrental.service.booktransaction;
 
-import com.bookrental.bookrental.exception.*;
 import com.bookrental.bookrental.enums.RentType;
+import com.bookrental.bookrental.exception.*;
 import com.bookrental.bookrental.mapper.BookTransactionMapper;
 import com.bookrental.bookrental.model.Book;
 import com.bookrental.bookrental.model.BookTransaction;
@@ -14,7 +14,6 @@ import com.bookrental.bookrental.repository.BookTransactionRepository;
 import com.bookrental.bookrental.repository.MemberRepository;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -29,8 +28,6 @@ import java.util.List;
 public class BookTransactionServiceImpl implements BookTransactionService {
 
     private final BookTransactionRepository bookTransactionRepository;
-
-    private final ModelMapper modelMapper;
 
     private final BookRepository bookRepository;
 
@@ -52,11 +49,11 @@ public class BookTransactionServiceImpl implements BookTransactionService {
             throw new AppException(e.getMessage());
         }
 
-        int a = bookRentRequest.getMemberId();
-        int b = bookRentRequest.getBookId();
+        int tempMemberId = bookRentRequest.getMemberId();
+        int tempBookId = bookRentRequest.getBookId();
 
-        Book book = bookRepository.findById(b).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", b));
-        Member member = memberRepository.findById(a).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", a));
+        Book book = bookRepository.findById(tempBookId).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", tempBookId));
+        Member member = memberRepository.findById(tempMemberId).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", tempMemberId));
 
         int overdewBooks = bookTransactionMapper.countTransactionsByMemberAndRentStatus(member.getId(), "RENT");
         if (overdewBooks > 0) {
@@ -68,9 +65,7 @@ public class BookTransactionServiceImpl implements BookTransactionService {
         bookTransaction.setRentStatus(RentType.RENT);
         bookTransaction.setMember(member);
         bookTransaction.setBook(book);
-        bookTransaction.setCode("#RENT");
-
-//        Book book1 = bookRepository.findById(b).get();
+        bookTransaction.setCode("#RENT");// unique
         book.setStockCount(book.getStockCount() - 1);
         bookTransaction.setActiveClosed(true);
 

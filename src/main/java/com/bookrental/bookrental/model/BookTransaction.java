@@ -21,8 +21,11 @@ public class BookTransaction {
     @SequenceGenerator(name = "transaction_seq_gen", sequenceName = "transaction_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_seq_gen")
     private Integer id;
+    @Column(unique = true, nullable = false)
     private String code;
+    @Column(nullable = false)
     private LocalDate fromDate;
+    @Column(nullable = false)
     private LocalDate toDate;
     private Boolean activeClosed;
 
