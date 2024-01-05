@@ -1,17 +1,12 @@
 package com.bookrental.bookrental.controller;
 
-import com.bookrental.bookrental.model.Author;
 import com.bookrental.bookrental.model.Category;
-import com.bookrental.bookrental.pojo.GlobalApiResponse;
 import com.bookrental.bookrental.pojo.category.CategoryRequestPojo;
 import com.bookrental.bookrental.pojo.category.CategoryResponsePojo;
-import com.bookrental.bookrental.pojo.member.MemberRequestPojo;
 import com.bookrental.bookrental.service.category.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,10 +21,9 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createMember(@Valid @RequestBody CategoryRequestPojo categoryRequestPojo) {
+    public ResponseEntity<Void> createCategory(@Valid @RequestBody CategoryRequestPojo categoryRequestPojo) {
         categoryService.createUpdateCateogory(categoryRequestPojo);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-//        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping

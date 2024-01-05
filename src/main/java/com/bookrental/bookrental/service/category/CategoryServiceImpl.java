@@ -1,8 +1,8 @@
 package com.bookrental.bookrental.service.category;
 
 import com.bookrental.bookrental.exception.AppException;
+import com.bookrental.bookrental.exception.CategoryAlreadyExistsException;
 import com.bookrental.bookrental.exception.ResourceNotFoundException;
-import com.bookrental.bookrental.config.CustomMessageSource;
 import com.bookrental.bookrental.mapper.CategoryMapper;
 import com.bookrental.bookrental.model.Category;
 import com.bookrental.bookrental.pojo.category.CategoryRequestPojo;
@@ -11,6 +11,7 @@ import com.bookrental.bookrental.repository.CategoryRepository;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
@@ -24,7 +25,6 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
 
     private final CategoryRepository categoryRepository;
-    private CustomMessageSource customMessageSource;
     private final NullAwareBeanUtilsBean beanUtils = new NullAwareBeanUtilsBean();
 
     @Override
@@ -38,24 +38,24 @@ public class CategoryServiceImpl implements CategoryService {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new AppException(e.getMessage());
         }
-        categoryRepository.save(category);
+        category.setActive(true);
+        try {
+            categoryRepository.save(category);
+        } catch (DataIntegrityViolationException e) {
+            throw new CategoryAlreadyExistsException("A category with the name " + category.getName() + " already exists. ");
+        }
     }
 
     @Override
     public CategoryResponsePojo getCategoryById(Integer id) {
-//        return this.categoryRepository.findById(id).orElseThrow(() -> new AppException(customMessageSource.
-//                get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.CATEGORY)));
-        Category c = this.categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category", " Id ", id));
-        return this.modelMapper.map(c, CategoryResponsePojo.class);
+//        Category c = this.categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category", " Id ", id));
+//        return this.modelMapper.map(c, CategoryResponsePojo.class);
+        return categoryMapper.getSingleCategory(id);
     }
 
     @Override
     public List<CategoryResponsePojo> getAllCategory() {
         return this.categoryMapper.getAllCategory();
-//        return this.categoryRepository.findAll();
-//        List<Category> list = this.categoryRepository.findAll();
-//        List<CategoryResponsePojo> list1 = list.stream().map(e -> this.modelMapper.map(e, CategoryResponsePojo.class)).collect(Collectors.toList());
-//        return list1;
     }
 
     @Override
