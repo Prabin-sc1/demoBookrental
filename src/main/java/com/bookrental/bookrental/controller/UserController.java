@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+//@EnableMethodSecurity
+//    @PreAuthorize("hasRole('ADMIN')")
+
+
 @RestController
 @RequestMapping("/user")
-@EnableMethodSecurity
 public class UserController {
     private UserService userService;
 
@@ -22,7 +25,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<UserResponsePojo> create(@RequestBody UserRequestPojo user) {
         userService.createUser(user);

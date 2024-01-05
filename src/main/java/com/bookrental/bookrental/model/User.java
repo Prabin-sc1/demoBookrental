@@ -10,7 +10,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -36,7 +40,7 @@ public class User implements UserDetails {
 //    )
 //    private Set<Role> roles = new HashSet<>();
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "tbl_user_role", joinColumns = {
             @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_tbl_user_role_tbl_user"))
     },
@@ -46,9 +50,16 @@ public class User implements UserDetails {
     )
     private Role role = new Role();
 
-    @Override
+    /*@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
+    }*/
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Assuming role is a single Role object associated with the user
+        // Check if role is not null, and return a list with a single authority
+        return role != null ? Collections.singletonList(new SimpleGrantedAuthority(role.getName())) : Collections.emptyList();
     }
 
     @Override

@@ -4,7 +4,6 @@ import com.bookrental.bookrental.model.BookTransaction;
 import com.bookrental.bookrental.pojo.rent.BookRentRequest;
 import com.bookrental.bookrental.pojo.returnn.BookReturnRequest;
 import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
-import com.bookrental.bookrental.schedular.OverdueBookEmailScheduler;
 import com.bookrental.bookrental.service.booktransaction.BookTransactionService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -17,12 +16,9 @@ import java.util.List;
 @RequestMapping("/booktransaction")
 public class BookTransactionController {
     private final BookTransactionService bookTransactionService;
-    private final OverdueBookEmailScheduler scheduler;
 
-
-    public BookTransactionController(BookTransactionService bookTransactionService, OverdueBookEmailScheduler scheduler) {
+    public BookTransactionController(BookTransactionService bookTransactionService) {
         this.bookTransactionService = bookTransactionService;
-        this.scheduler = scheduler;
     }
 
     @PostMapping("/rent")
@@ -56,11 +52,5 @@ public class BookTransactionController {
     @GetMapping("/member/{id}")
     public ResponseEntity<List<BookTransactionResponse>> getAllTransactionByMemberId(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(bookTransactionService.getAllTransactionByMember(id));
-    }
-
-    @GetMapping("/overdeu")
-    public ResponseEntity<String> triggerOverdueEmails() {
-//        scheduler.triggerOverdueEmailsManually();
-        return ResponseEntity.ok("Overdue emails triggered manually.");
     }
 }

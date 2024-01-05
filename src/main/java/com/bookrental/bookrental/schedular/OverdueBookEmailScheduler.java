@@ -25,7 +25,6 @@ public class OverdueBookEmailScheduler {
     @Scheduled(cron = "0 0 0 * * *")
     public void sendOverdueEmails() {
         List<BookTransactionResponse> list = bookTransactionMapper.overdeuList();
-//        list.stream().map(e -> {})
         for (BookTransactionResponse bookTransaction : list) {
 
             int b = bookTransaction.getMemberId();
@@ -38,14 +37,10 @@ public class OverdueBookEmailScheduler {
             String emailMember = m.getEmail();
             try {
                 emailService.sendEmail(emailMember, subject, message);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
     }
-
-//    public void triggerOverdueEmailsManually() {
-//        sendOverdueEmails(); // Call the method manually
-//    }
 }
