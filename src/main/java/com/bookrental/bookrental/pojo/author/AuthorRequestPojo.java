@@ -1,8 +1,7 @@
 package com.bookrental.bookrental.pojo.author;
 
-import jakarta.validation.constraints.Email;
+import com.bookrental.bookrental.customvalidation.Gmail;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,7 @@ public class AuthorRequestPojo {
     @NotBlank
     private String name;
     @NotBlank
-    @Email(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", message = "Invalid email")
+    @Gmail(gmailOnly = true)
     private String email;
     @NotBlank
     @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Invalid mobile number")
