@@ -14,10 +14,8 @@ public class AuthorRequestPojo {
     private Integer id;
     @NotBlank
     private String name;
-    @NotBlank
     @Gmail(gmailOnly = true)
     private String email;
-    @NotBlank
     @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Invalid mobile number")
     private String mobileNumber;
 }

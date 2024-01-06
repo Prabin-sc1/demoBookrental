@@ -1,10 +1,9 @@
 package com.bookrental.bookrental.service.author;
 
-import com.bookrental.bookrental.exception.AppException;
 import com.bookrental.bookrental.config.CustomMessageSource;
-import com.bookrental.bookrental.constants.ModuleNameConstants;
-import com.bookrental.bookrental.enums.Message;
+import com.bookrental.bookrental.exception.AppException;
 import com.bookrental.bookrental.exception.CategoryAlreadyExistsException;
+import com.bookrental.bookrental.mapper.AuthorMapper;
 import com.bookrental.bookrental.model.Author;
 import com.bookrental.bookrental.pojo.author.AuthorRequestPojo;
 import com.bookrental.bookrental.pojo.author.AuthorResponsePojo;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,9 +23,7 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
     private NullAwareBeanUtilsBean beanUtils = new NullAwareBeanUtilsBean();
 
-    private final CustomMessageSource customMessageSource;
-
-    private final ModelMapper modelMapper;
+    private final AuthorMapper authorMapper;
 
     @Override
     public void createUpdateAuthor(AuthorRequestPojo authorRequestPojo) {
@@ -51,16 +47,20 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<AuthorResponsePojo> getAllAuthor() {
-        List<Author> a = authorRepository.findAll();
-        List<AuthorResponsePojo> list1 = a.stream().map(e -> this.modelMapper.map(e, AuthorResponsePojo.class)).collect(Collectors.toList());
-        return list1;
+//        List<Author> a = authorRepository.findAll();
+//        List<AuthorResponsePojo> list1 = a.stream().map(e -> this.modelMapper.map(e, AuthorResponsePojo.class)).collect(Collectors.toList());
+//        return list1;
+        return authorMapper.getAllAuthor();
     }
 
     @Override
     public AuthorResponsePojo getAuthorById(Integer id) {
-        Author a = authorRepository.findById(id).orElseThrow(() -> new AppException(customMessageSource.
-                get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.AUTHOR)));
-        return this.modelMapper.map(a, AuthorResponsePojo.class);
+        // previously i used write code this way
+//        Author a = authorRepository.findById(id).orElseThrow(() -> new AppException(customMessageSource.
+//                get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.AUTHOR)));
+//        return this.modelMapper.map(a, AuthorResponsePojo.class);
+        // this is the latest one to do same thing
+        return authorMapper.getSingleAuthor(id);
     }
 
     @Override
