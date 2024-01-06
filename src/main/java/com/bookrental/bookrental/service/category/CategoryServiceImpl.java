@@ -10,18 +10,16 @@ import com.bookrental.bookrental.pojo.category.CategoryResponsePojo;
 import com.bookrental.bookrental.repository.CategoryRepository;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
-    private final ModelMapper modelMapper;
-
     private final CategoryMapper categoryMapper;
 
     private final CategoryRepository categoryRepository;
@@ -48,14 +46,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponsePojo getCategoryById(Integer id) {
-//        Category c = this.categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category", " Id ", id));
-//        return this.modelMapper.map(c, CategoryResponsePojo.class);
         return categoryMapper.getSingleCategory(id);
     }
 
     @Override
     public List<CategoryResponsePojo> getAllCategory() {
-        return this.categoryMapper.getAllCategory();
+        return categoryMapper.getAllCategory();
     }
 
     @Override

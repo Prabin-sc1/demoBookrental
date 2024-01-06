@@ -29,6 +29,5 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Book> bookList = new ArrayList<>();
-
     private boolean isActive;
 }

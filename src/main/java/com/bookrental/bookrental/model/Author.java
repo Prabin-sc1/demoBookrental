@@ -1,6 +1,7 @@
 package com.bookrental.bookrental.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,10 +21,10 @@ public class Author {
     @SequenceGenerator(name = "author_seq_gen", sequenceName = "author_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_seq_gen")
     private Integer id;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false, unique = true)
     private String email;
+    @Column(nullable = false)
     private String mobileNumber;
-//
-//    @ManyToMany(mappedBy = "authors")
-//    private List<Book> book = new ArrayList<>();
 }

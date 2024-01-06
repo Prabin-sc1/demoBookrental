@@ -9,6 +9,5 @@ public class CategoryResponsePojo {
     private Integer id;
     private String name;
     private String description;
-//    private String namee = "fsad";
 }
 
