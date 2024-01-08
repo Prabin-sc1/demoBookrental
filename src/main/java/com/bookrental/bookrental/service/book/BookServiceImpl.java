@@ -1,8 +1,8 @@
 package com.bookrental.bookrental.service.book;
 
 import com.bookrental.bookrental.exception.AppException;
+import com.bookrental.bookrental.exception.BookAlreadyExistsException;
 import com.bookrental.bookrental.exception.ResourceNotFoundException;
-import com.bookrental.bookrental.config.CustomMessageSource;
 import com.bookrental.bookrental.mapper.BookMapper;
 import com.bookrental.bookrental.model.Author;
 import com.bookrental.bookrental.model.Book;
@@ -14,12 +14,11 @@ import com.bookrental.bookrental.repository.BookRepository;
 import com.bookrental.bookrental.repository.CategoryRepository;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,9 +26,7 @@ public class BookServiceImpl implements BookService {
 
     private final BookMapper bookMapper;
     private final BookRepository bookRepository;
-    private final ModelMapper modelMapper;
     private final NullAwareBeanUtilsBean utilsBean = new NullAwareBeanUtilsBean();
-    private CustomMessageSource customMessageSource;
 
     private final AuthorRepository authorRepository;
 
@@ -50,20 +47,16 @@ public class BookServiceImpl implements BookService {
             throw new AppException(e.getMessage());
         }
 
-        //get category id
-        Integer cidd = book.getCategoryId();
-        Category cc = this.categoryRepository.findById(cidd).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", cidd));
-
-        authors = book.getAuthorId().stream().map(e -> authorRepository.findById(e).orElseThrow(() -> new ResourceNotFoundException("Author", "Id", 1))).collect(Collectors.toList());
+        Integer categoryId = book.getCategoryId();
+        Category tempCategory = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", categoryId));
+        authors = book.getAuthorId().stream().map(e -> authorRepository.findById(e).orElseThrow(() -> new ResourceNotFoundException("Author", "Id", 1))).toList();
         b.setAuthors(authors);
-        b.setCategory(cc);
-        bookRepository.save(b);
-    }
-
-    @Override
-    public void deleteBook(Integer id) {
-        bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "Id", id));
-        bookRepository.deleteById(id);
+        b.setCategory(tempCategory);
+        try {
+            bookRepository.save(b);
+        } catch (DataIntegrityViolationException e) {
+            throw new BookAlreadyExistsException("The name of this book, " + book.getName() + " already exists.");
+        }
     }
 
     @Override
@@ -74,5 +67,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookResponsePojo getBookById(Integer id) {
         return bookMapper.getBookById(id);
+    }
+
+    @Override
+    public void deleteBook(Integer id) {
+        bookRepository.deleteById(id);
     }
 }

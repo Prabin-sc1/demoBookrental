@@ -19,7 +19,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(a, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({BookStockException.class, MemberOverdewRentalException.class, InvalidTransactionStateException.class, CategoryAlreadyExistsException.class})
+    @ExceptionHandler({BookStockException.class, MemberOverdewRentalException.class, InvalidTransactionStateException.class,
+            BookAlreadyExistsException.class,
+            CategoryAlreadyExistsException.class})
     public Map<String, String> handleBusinessException(Exception b) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("errorMessage", b.getMessage());

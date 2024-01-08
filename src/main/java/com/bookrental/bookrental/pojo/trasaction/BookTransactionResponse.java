@@ -5,6 +5,7 @@ import com.bookrental.bookrental.model.Book;
 import com.bookrental.bookrental.model.Member;
 import com.bookrental.bookrental.pojo.book.BookResponsePojo;
 import com.bookrental.bookrental.pojo.member.MemberResponsePojo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
@@ -21,8 +22,12 @@ public class BookTransactionResponse {
     private String code;
     private LocalDate fromDate;
     private LocalDate toDate;
+    @JsonIgnore
     private Integer bookId;
+    @JsonIgnore
     private Integer memberId;
+    private String bookName;
+    private String memberName;
     @Enumerated(EnumType.STRING)
     private RentType rentStatus;
 }

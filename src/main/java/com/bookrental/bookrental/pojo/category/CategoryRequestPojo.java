@@ -10,7 +10,6 @@ import lombok.Singular;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class CategoryRequestPojo {
     private Integer id;
     @NotBlank

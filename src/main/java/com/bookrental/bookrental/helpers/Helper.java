@@ -44,8 +44,8 @@ public class Helper {
                 dataRow.createCell(1).setCellValue(b.getCode());
                 dataRow.createCell(2).setCellValue(b.getFromDate());
                 dataRow.createCell(3).setCellValue(b.getToDate());
-                dataRow.createCell(4).setCellValue(b.getBookId());
-                dataRow.createCell(5).setCellValue(b.getMemberId());
+                dataRow.createCell(4).setCellValue(b.getBookName());
+                dataRow.createCell(5).setCellValue(b.getMemberName());
                 dataRow.createCell(6).setCellValue(String.valueOf(b.getRentStatus()));
             }
             workbook.write(out);
@@ -57,6 +57,5 @@ public class Helper {
             workbook.close();
             out.close();
         }
-//        return new ByteArrayInputStream(out.toByteArray());
     }
 }

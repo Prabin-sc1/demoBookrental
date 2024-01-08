@@ -11,7 +11,6 @@ import java.util.List;
 
 @Setter
 @Getter
-@NoArgsConstructor
 public class BookResponsePojo {
     private Integer id;
     private String name;

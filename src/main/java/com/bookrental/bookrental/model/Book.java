@@ -1,5 +1,6 @@
 package com.bookrental.bookrental.model;
 
+import com.bookrental.bookrental.generic.AuditActiveAbstract;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,14 +16,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tbl_book")
-public class Book {
+public class Book extends AuditActiveAbstract {
 
     @Id
     @SequenceGenerator(name = "book_seq_gen", sequenceName = "book_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_seq_gen")
     private Integer id;
 
-    @Column(columnDefinition = "VARCHAR(100)")
+    @Column(columnDefinition = "VARCHAR(100)", unique = true)
     private String name;
 
     private Integer noOfPages;

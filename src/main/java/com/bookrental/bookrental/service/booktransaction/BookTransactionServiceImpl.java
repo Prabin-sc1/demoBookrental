@@ -2,6 +2,7 @@ package com.bookrental.bookrental.service.booktransaction;
 
 import com.bookrental.bookrental.enums.RentType;
 import com.bookrental.bookrental.exception.*;
+import com.bookrental.bookrental.mapper.BookMapper;
 import com.bookrental.bookrental.mapper.BookTransactionMapper;
 import com.bookrental.bookrental.model.Book;
 import com.bookrental.bookrental.model.BookTransaction;
@@ -37,7 +38,6 @@ public class BookTransactionServiceImpl implements BookTransactionService {
     private final BookTransactionMapper bookTransactionMapper;
     private final Random r = new Random();
 
-
     @Override
     public void addBookTransaction(BookRentRequest bookRentRequest) {
         BookTransaction bookTransaction = new BookTransaction();
@@ -64,11 +64,19 @@ public class BookTransactionServiceImpl implements BookTransactionService {
         bookTransaction.setFromDate(LocalDate.now());
         bookTransaction.setToDate(LocalDate.now().plusDays(10));
         bookTransaction.setRentStatus(RentType.RENT);
-        bookTransaction.setMember(member);
-        bookTransaction.setBook(book);
-        bookTransaction.setCode("#"+r.nextInt());
+        if (Boolean.TRUE.equals(member.isActive())) {
+            bookTransaction.setMember(member);
+        } else {
+            throw new BookAlreadyExistsException("member is not active");
+        }
+        if (Boolean.TRUE.equals(book.isActive())) {
+            bookTransaction.setBook(book);
+        } else {
+            throw new BookAlreadyExistsException("book is not active");
+        }
+        bookTransaction.setCode("#" + r.nextInt());
         book.setStockCount(book.getStockCount() - 1);
-        bookTransaction.setActiveClosed(true);
+        bookTransaction.setActive(true);
 
         if (book.getStockCount() < 1)
             throw new BookStockException("Sorry, we are out of stock!");
@@ -101,7 +109,7 @@ public class BookTransactionServiceImpl implements BookTransactionService {
     private void updateBookTransaction(BookTransaction bookTransaction) {
         bookTransaction.setToDate(LocalDate.now());
         bookTransaction.setRentStatus(RentType.RETURN);
-        bookTransaction.setActiveClosed(true);
+        bookTransaction.setActive(true);
         bookTransactionRepository.save(bookTransaction);
     }
 

@@ -25,7 +25,7 @@ public interface BookMapper {
                     @Result(property = "authors", column = "id",
                             many = @Many(select = "getAuthorsByBookId"))
             })
-    @Select("SELECT * FROM tbl_book")
+    @Select("SELECT * FROM tbl_book where is_active")
     List<BookResponsePojo> getAllBook();
 
     @Results(id = "bookResultMap2",
@@ -42,9 +42,6 @@ public interface BookMapper {
                     @Result(property = "authors", column = "id",
                             many = @Many(select = "getAuthorsByBookId"))
             })
-    @Select("SELECT * FROM tbl_book where id =#{id}")
+    @Select("SELECT * FROM tbl_book where id =#{id} and is_active")
     BookResponsePojo getBookById(@Param("id") Integer id);
 }
-
-
-

@@ -9,7 +9,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class AuthorRequestPojo {
     private Integer id;
     @NotBlank

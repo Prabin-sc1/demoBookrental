@@ -3,6 +3,7 @@ package com.bookrental.bookrental.controller;
 import com.bookrental.bookrental.pojo.member.MemberRequestPojo;
 import com.bookrental.bookrental.pojo.member.MemberResponsePojo;
 import com.bookrental.bookrental.service.member.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity<MemberRequestPojo> createMember(@RequestBody MemberRequestPojo memberRequestPojo) {
+    public ResponseEntity<MemberRequestPojo> createMember(@Valid @RequestBody MemberRequestPojo memberRequestPojo) {
         memberService.createMember(memberRequestPojo);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

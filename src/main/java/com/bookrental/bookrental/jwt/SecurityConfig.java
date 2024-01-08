@@ -21,7 +21,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfig {
-
     private final JwtAuthenticationEntryPoint point;
     private final JwtAuthenticationFilter filter;
     private final UserDetailsService userDetailService;
@@ -35,6 +34,7 @@ public class SecurityConfig {
                 requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/user/**").hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/member/**").hasAuthority("ROLE_LIBRARIAN")
+                .requestMatchers("/excel/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and().exceptionHandling(ex -> ex.authenticationEntryPoint(point))

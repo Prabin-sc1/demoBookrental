@@ -6,7 +6,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class AuthorResponsePojo {
     private Integer id;
     private String name;

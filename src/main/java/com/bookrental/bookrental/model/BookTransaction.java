@@ -1,6 +1,7 @@
 package com.bookrental.bookrental.model;
 
 import com.bookrental.bookrental.enums.RentType;
+import com.bookrental.bookrental.generic.AuditActiveAbstract;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tbl_book_transaction")
-public class BookTransaction {
+public class BookTransaction extends AuditActiveAbstract {
     @Id
     @SequenceGenerator(name = "transaction_seq_gen", sequenceName = "transaction_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaction_seq_gen")
@@ -27,7 +28,7 @@ public class BookTransaction {
     private LocalDate fromDate;
     @Column(nullable = false)
     private LocalDate toDate;
-    private Boolean activeClosed;
+//    private Boolean activeClosed;
 
     @Column(name = "rent_status")
     @Enumerated(EnumType.STRING)

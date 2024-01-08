@@ -1,6 +1,5 @@
 package com.bookrental.bookrental.service.author;
 
-import com.bookrental.bookrental.config.CustomMessageSource;
 import com.bookrental.bookrental.exception.AppException;
 import com.bookrental.bookrental.exception.CategoryAlreadyExistsException;
 import com.bookrental.bookrental.mapper.AuthorMapper;
@@ -10,7 +9,6 @@ import com.bookrental.bookrental.pojo.author.AuthorResponsePojo;
 import com.bookrental.bookrental.repository.AuthorRepository;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +53,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public AuthorResponsePojo getAuthorById(Integer id) {
-        // previously i used write code this way
+        // previously I used to write code this way
 //        Author a = authorRepository.findById(id).orElseThrow(() -> new AppException(customMessageSource.
 //                get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.AUTHOR)));
 //        return this.modelMapper.map(a, AuthorResponsePojo.class);
