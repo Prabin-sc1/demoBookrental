@@ -29,12 +29,8 @@ public class AuthController {
         this.helper = helper;
     }
 
-    private Logger logger = LoggerFactory.getLogger(AuthController.class);
-
-
     @PostMapping("/login")
     public ResponseEntity<JwtResponsePojo> login(@RequestBody JwtRequestPojo request) {
-
         this.doAuthenticate(request.getEmail(), request.getPassword());
 
 
@@ -52,8 +48,6 @@ public class AuthController {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
         try {
             manager.authenticate(authentication);
-
-
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException(" Invalid Username or Password  !!");
         }

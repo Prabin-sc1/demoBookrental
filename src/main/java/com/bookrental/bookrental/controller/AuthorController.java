@@ -1,46 +1,49 @@
 package com.bookrental.bookrental.controller;
 
-import com.bookrental.bookrental.model.Author;
+import com.bookrental.bookrental.constants.ModuleNameConstants;
+import com.bookrental.bookrental.enums.Message;
+import com.bookrental.bookrental.generic.GlobalApiResponse;
 import com.bookrental.bookrental.pojo.author.AuthorRequestPojo;
-import com.bookrental.bookrental.pojo.author.AuthorResponsePojo;
 import com.bookrental.bookrental.service.author.AuthorService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/author")
-public class AuthorController {
+@Tag(name = ModuleNameConstants.AUTHOR)
+public class AuthorController extends MyBaseController {
 
     private final AuthorService authorService;
 
     public AuthorController(AuthorService authorService) {
         this.authorService = authorService;
+        this.module = ModuleNameConstants.AUTHOR;
     }
 
     @PostMapping
-    public ResponseEntity<AuthorRequestPojo> createUpdate(@Valid @RequestBody AuthorRequestPojo authorRequestPojo) {
-        this.authorService.createUpdateAuthor(authorRequestPojo);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<GlobalApiResponse> createUpdate(@Valid @RequestBody AuthorRequestPojo authorRequestPojo) {
+        authorService.createUpdateAuthor(authorRequestPojo);
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),
+                null));
     }
 
     @GetMapping
-    public ResponseEntity<List<AuthorResponsePojo>> getAll() {
-        return ResponseEntity.ok(this.authorService.getAllAuthor());
+    public ResponseEntity<GlobalApiResponse> getAll() {
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.RETRIEVE.getCode(), module), authorService.getAllAuthor()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AuthorResponsePojo> getAuthor(@PathVariable Integer id) {
-        return ResponseEntity.ok(this.authorService.getAuthorById(id));
+    public ResponseEntity<GlobalApiResponse> getAuthor(@PathVariable Integer id) {
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.RETRIEVE.getCode(), module),
+                authorService.getAuthorById(id)));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Author> delete(@PathVariable Integer id) {
-        this.authorService.deleteById(id);
-        return null;
+    public ResponseEntity<GlobalApiResponse> delete(@PathVariable Integer id) {
+        authorService.deleteById(id);
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.DELETE.getCode(), module),
+                null));
     }
-
 }

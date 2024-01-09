@@ -1,44 +1,46 @@
 package com.bookrental.bookrental.controller;
 
+import com.bookrental.bookrental.constants.ModuleNameConstants;
+import com.bookrental.bookrental.enums.Message;
+import com.bookrental.bookrental.generic.GlobalApiResponse;
 import com.bookrental.bookrental.pojo.book.BookRequestPojo;
-import com.bookrental.bookrental.pojo.book.BookResponsePojo;
 import com.bookrental.bookrental.service.book.BookService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/book")
-public class BookController {
-    private BookService bookService;
+@Tag(name = ModuleNameConstants.BOOK)
+public class BookController extends MyBaseController {
+    private final BookService bookService;
 
     public BookController(BookService bookService) {
         this.bookService = bookService;
+        this.module = ModuleNameConstants.BOOK;
     }
 
     @PostMapping
-    public ResponseEntity<BookRequestPojo> create(@Valid @RequestBody BookRequestPojo bookRequestPojo) {
-        this.bookService.createUpdateBook(bookRequestPojo);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<BookRequestPojo> delete(@PathVariable Integer id) {
-        this.bookService.deleteBook(id);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<GlobalApiResponse> create(@Valid @RequestBody BookRequestPojo bookRequestPojo) {
+        bookService.createUpdateBook(bookRequestPojo);
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),
+                null));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookResponsePojo> getById(@PathVariable Integer id) {
-        return ResponseEntity.ok(this.bookService.getBookById(id));
+    public ResponseEntity<GlobalApiResponse> getById(@PathVariable Integer id) {
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.RETRIEVE.getCode(), module), bookService.getBookById(id)));
     }
 
     @GetMapping
-    public ResponseEntity<List<BookResponsePojo>> getAll() {
-        return ResponseEntity.ok(this.bookService.getAllBooks());
+    public ResponseEntity<GlobalApiResponse> getAll() {
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.RETRIVE_ALL.getCode(), module), bookService.getAllBooks()));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<GlobalApiResponse> delete(@PathVariable Integer id) {
+        bookService.deleteBook(id);
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.DELETE.getCode(), module), null));
+    }
 }

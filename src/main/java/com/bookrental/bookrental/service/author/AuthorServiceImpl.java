@@ -40,7 +40,6 @@ public class AuthorServiceImpl implements AuthorService {
         } catch (DataIntegrityViolationException e) {
             throw new CategoryAlreadyExistsException("A author with the email " + author.getEmail() + " already exists.");
         }
-
     }
 
     @Override
