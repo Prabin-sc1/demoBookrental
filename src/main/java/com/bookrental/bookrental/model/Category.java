@@ -1,10 +1,14 @@
 package com.bookrental.bookrental.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,6 +21,13 @@ public class Category {
     @SequenceGenerator(name = "category_seq_gen", sequenceName = "category_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_seq_gen")
     private Integer id;
+    @Column(nullable = false, length = 100, unique = true)
     private String name;
+    @Column(nullable = false, length = 1000)
     private String description;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Book> bookList = new ArrayList<>();
+    private boolean isActive;
 }
