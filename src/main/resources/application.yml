@@ -16,6 +16,7 @@ spring:
             non_contextual_creation: true
       format_sql: true
     open-in-view: false
+
 server:
   port: 9889
   servlet:
@@ -26,4 +27,8 @@ security:
     name: prabin
     password: prabin
 
-
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs

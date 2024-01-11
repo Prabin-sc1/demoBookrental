@@ -4,20 +4,13 @@ import com.bookrental.bookrental.constants.ModuleNameConstants;
 import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.generic.GlobalApiResponse;
 import com.bookrental.bookrental.pojo.member.MemberRequestPojo;
-import com.bookrental.bookrental.pojo.member.MemberResponsePojo;
 import com.bookrental.bookrental.service.member.MemberService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/member")
-@Tag(name = ModuleNameConstants.MEMBER)
 public class MemberController extends MyBaseController {
     private MemberService memberService;
 

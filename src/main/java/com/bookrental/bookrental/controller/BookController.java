@@ -5,14 +5,12 @@ import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.generic.GlobalApiResponse;
 import com.bookrental.bookrental.pojo.book.BookRequestPojo;
 import com.bookrental.bookrental.service.book.BookService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/book")
-@Tag(name = ModuleNameConstants.BOOK)
 public class BookController extends MyBaseController {
     private final BookService bookService;
 

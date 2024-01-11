@@ -5,7 +5,6 @@ import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.generic.GlobalApiResponse;
 import com.bookrental.bookrental.pojo.category.CategoryRequestPojo;
 import com.bookrental.bookrental.service.category.CategoryService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/category")
-@Tag(name = ModuleNameConstants.CATEGORY)
 public class CategoryController extends MyBaseController {
     private CategoryService categoryService;
 

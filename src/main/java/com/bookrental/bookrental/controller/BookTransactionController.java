@@ -8,7 +8,6 @@ import com.bookrental.bookrental.pojo.rent.BookRentRequest;
 import com.bookrental.bookrental.pojo.returnn.BookReturnRequest;
 import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
 import com.bookrental.bookrental.service.booktransaction.BookTransactionService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/booktransaction")
-@Tag(name = ModuleNameConstants.TRANSACTION)
 public class BookTransactionController extends MyBaseController {
     private final BookTransactionService bookTransactionService;
 

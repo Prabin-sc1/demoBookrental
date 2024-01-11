@@ -32,7 +32,5 @@ public class ExcelController {
                 .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                 .body(file);
         return body;
-
-
     }
 }

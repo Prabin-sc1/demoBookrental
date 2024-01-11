@@ -5,16 +5,13 @@ import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.generic.GlobalApiResponse;
 import com.bookrental.bookrental.pojo.author.AuthorRequestPojo;
 import com.bookrental.bookrental.service.author.AuthorService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/author")
-@Tag(name = ModuleNameConstants.AUTHOR)
 public class AuthorController extends MyBaseController {
-
     private final AuthorService authorService;
 
     public AuthorController(AuthorService authorService) {
