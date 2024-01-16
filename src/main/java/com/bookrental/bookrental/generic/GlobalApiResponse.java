@@ -1,17 +1,14 @@
 package com.bookrental.bookrental.generic;
 
 import com.bookrental.bookrental.enums.ResponseStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Data
+@Getter
+@Setter
 public class GlobalApiResponse {
     private ResponseStatus responseStatus;
     private String message;
     private Object data;
 }
+
+

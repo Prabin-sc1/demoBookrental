@@ -1,8 +1,10 @@
 package com.bookrental.bookrental.controller;
 
+import com.bookrental.bookrental.constants.ModuleNameConstants;
 import com.bookrental.bookrental.jwt.JwtHelper;
 import com.bookrental.bookrental.pojo.jwt.JwtRequestPojo;
 import com.bookrental.bookrental.pojo.jwt.JwtResponsePojo;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -32,7 +34,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<JwtResponsePojo> login(@RequestBody JwtRequestPojo request) {
         this.doAuthenticate(request.getEmail(), request.getPassword());
-
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
         String token = this.helper.generateToken(userDetails);

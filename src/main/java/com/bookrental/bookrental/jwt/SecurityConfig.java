@@ -25,8 +25,29 @@ public class SecurityConfig {
     private final UserDetailsService userDetailService;
     private final PasswordEncoder passwordEncoder;
 
-    private static final String[] PUBLIC_URLS = {"/swagger-ui/**", "/api-docs"};
-
+    /*private static final String[] PUBLIC_URLS = {
+            "/api-docs",
+            "/swagger-ui/**",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/webjars/**",
+            "/swagger-ui.html",
+            "/v3/api-docs",
+    };*/
+    private static final String[] PUBLIC_URLS = {
+            "/api-docs",
+            "/swagger-ui/**",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/webjars/**",
+            "/swagger-ui.html",
+            "/v3/api-docs",
+            "/webjars/**"
+    };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -35,7 +56,7 @@ public class SecurityConfig {
                 requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/user/**").hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/member/**").hasAuthority("ROLE_LIBRARIAN")
-                .requestMatchers("/book/**").hasAuthority("ROLE_LIBRARIAN")
+                .requestMatchers("/book/**").hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/author/**").permitAll()
                 .requestMatchers("/excel/**").hasAuthority("ROLE_LIBRARIAN")
                 .requestMatchers(PUBLIC_URLS).permitAll()

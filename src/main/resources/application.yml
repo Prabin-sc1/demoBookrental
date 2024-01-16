@@ -29,6 +29,11 @@ security:
 
 springdoc:
   swagger-ui:
+    urls:
+      - url: "/book-rental/api-docs"
+        name: "book-rental"
+    enabled: true
     path: /swagger-ui.html
   api-docs:
     path: /api-docs
+    version: openapi_3_1

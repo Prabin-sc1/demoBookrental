@@ -11,17 +11,7 @@ public class MyBaseController {
     protected CustomMessageSource customMessageSource;
     private static final ResponseStatus API_SUCCESS_STATUS = ResponseStatus.SUCCESS;
     private static final ResponseStatus API_FAIL_STATUS = ResponseStatus.FAIL;
-
     protected String module;
-
-    protected void setModule(String module) {
-        this.module = module;
-    }
-
-    protected String getModule() {
-        return module;
-    }
-
 
     protected GlobalApiResponse successResponse(String message, Object data) {
         GlobalApiResponse globalApiResponse = new GlobalApiResponse();
@@ -31,7 +21,6 @@ public class MyBaseController {
         return globalApiResponse;
     }
 
-
     protected GlobalApiResponse errorResponse(String message, Object data) {
         GlobalApiResponse globalApiResponse = new GlobalApiResponse();
         globalApiResponse.setResponseStatus(API_FAIL_STATUS);
@@ -39,6 +28,4 @@ public class MyBaseController {
         globalApiResponse.setData(data);
         return globalApiResponse;
     }
-
-
 }

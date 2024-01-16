@@ -35,11 +35,13 @@ public class AuthorServiceImpl implements AuthorService {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new AppException(e.getMessage());
         }
+
         try {
             authorRepository.save(author);
         } catch (DataIntegrityViolationException e) {
             throw new CategoryAlreadyExistsException("A author with the email " + author.getEmail() + " already exists.");
         }
+
     }
 
     @Override
