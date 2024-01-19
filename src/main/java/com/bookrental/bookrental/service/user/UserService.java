@@ -8,8 +8,11 @@ import java.util.List;
 
 public interface UserService {
     void createUser(UserRequestPojo user);
+
     UserResponsePojo getUserById(Integer id);
+
     List<UserResponsePojo> getAllUser();
+
     void deleteUser(Integer id);
 
     Boolean changePassword(String oldPassword, String newPassword, Principal principal);

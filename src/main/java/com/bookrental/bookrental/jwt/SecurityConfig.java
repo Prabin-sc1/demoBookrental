@@ -37,6 +37,7 @@ public class SecurityConfig {
             "/v3/api-docs",
             "/webjars/**"
     };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -44,12 +45,13 @@ public class SecurityConfig {
                 .authorizeRequests().
                 requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/member/**").hasAuthority("ROLE_LIBRARIAN")
+                .requestMatchers("/user/**").permitAll()
                 .requestMatchers("/book/**").hasAuthority("ROLE_LIBRARIAN")
-                .requestMatchers("/author/**").permitAll()
+                .requestMatchers("/author/**").hasAuthority("ROLE_LIBRARIAN")
                 .requestMatchers("/booktransaction/**").permitAll()
-                .requestMatchers("/excel/**").permitAll()
-                .requestMatchers(PUBLIC_URLS).permitAll()
+                .requestMatchers("/excel/**").hasAuthority("ROLE_LIBRARIAN")
                 .requestMatchers("/category/**").hasAuthority("ROLE_LIBRARIAN")
+                .requestMatchers(PUBLIC_URLS).permitAll()
                 .anyRequest()
                 .authenticated()
                 .and().exceptionHandling(ex -> ex.authenticationEntryPoint(point))

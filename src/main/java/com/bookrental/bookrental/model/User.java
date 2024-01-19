@@ -1,6 +1,6 @@
 package com.bookrental.bookrental.model;
 
-import com.bookrental.bookrental.repository.RoleRepository;
+import com.bookrental.bookrental.generic.AuditActiveAbstract;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,11 +10,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -22,7 +19,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Entity
 @Table(name = "tbl_user")
-public class User implements UserDetails {
+public class User extends AuditActiveAbstract implements UserDetails {
     @Id
     @SequenceGenerator(name = "user_seq_gen", sequenceName = "user_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_gen")

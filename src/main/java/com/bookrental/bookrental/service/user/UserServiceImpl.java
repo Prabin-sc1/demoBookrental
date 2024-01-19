@@ -4,6 +4,7 @@ import com.bookrental.bookrental.config.CustomMessageSource;
 import com.bookrental.bookrental.constants.ModuleNameConstants;
 import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.exception.AppException;
+import com.bookrental.bookrental.mapper.UserMapper;
 import com.bookrental.bookrental.model.User;
 import com.bookrental.bookrental.pojo.user.UserRequestPojo;
 import com.bookrental.bookrental.pojo.user.UserResponsePojo;
@@ -26,6 +27,9 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final CustomMessageSource customMessageSource;
+
+    private final UserMapper userMapper;
+
     @Override
     public void createUser(UserRequestPojo user) {
         User u = new User();
@@ -47,7 +51,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(username).orElseThrow(() ->
                 new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.USER)));
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            return false;
+            throw new AppException(customMessageSource.get(Message.PASSWORD_NOT_MATCH.getCode(), ModuleNameConstants.USER));
         }
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
@@ -56,17 +60,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponsePojo getUserById(Integer id) {
-        return null;
+        return userMapper.getSingleUser(id).orElseThrow(() -> new AppException("User not found"));
     }
 
     @Override
     public List<UserResponsePojo> getAllUser() {
-        return null;
+        return userMapper.allUser();
     }
 
     @Override
     public void deleteUser(Integer id) {
-
+        userRepository.deleteById(id);
     }
 
 }

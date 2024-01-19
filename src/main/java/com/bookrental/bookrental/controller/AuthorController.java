@@ -81,8 +81,7 @@ public class AuthorController extends MyBaseController {
     @Operation(
             summary = "Delete author",
             description = "This end point used to delete author",
-            responses = @ApiResponse(responseCode = "200"
-            )
+            responses = @ApiResponse(responseCode = "200")
     )
     public ResponseEntity<GlobalApiResponse> delete(@PathVariable Integer id) {
         authorService.deleteById(id);

@@ -4,7 +4,6 @@ import com.bookrental.bookrental.customvalidation.Gmail;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -15,8 +14,10 @@ public class MemberRequestPojo {
     private String email;
     @NotNull
     private String name;
+
     @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Invalid mobile number")
     private String mobileNumber;
+
     @NotNull
     private String address;
 }

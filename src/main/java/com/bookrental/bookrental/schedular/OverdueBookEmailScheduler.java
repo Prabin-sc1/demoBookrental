@@ -25,7 +25,7 @@ public class OverdueBookEmailScheduler {
 
     //    @Scheduled(cron = "0 * * * * *") // Run every minute
 //    @Scheduled(cron = "0/1 * * * * *") // Run every second
-    @Scheduled(cron = "0 0 0 * * *")
+//    @Scheduled(cron = "0 0 0 * * *")
     public void sendOverdueEmails() {
         List<BookTransactionResponse> list = bookTransactionMapper.overdeuList();
         for (BookTransactionResponse bookTransaction : list) {

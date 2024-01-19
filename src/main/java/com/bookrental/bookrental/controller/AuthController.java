@@ -1,10 +1,13 @@
 package com.bookrental.bookrental.controller;
 
+import com.bookrental.bookrental.config.CustomMessageSource;
+import com.bookrental.bookrental.constants.ModuleNameConstants;
+import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.jwt.JwtHelper;
-import com.bookrental.bookrental.pojo.ChangePasswordRequest;
 import com.bookrental.bookrental.pojo.jwt.JwtRequestPojo;
 import com.bookrental.bookrental.pojo.jwt.JwtResponsePojo;
 import com.bookrental.bookrental.service.user.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,24 +17,25 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+@Tag(name = ModuleNameConstants.AUTH)
+public class AuthController extends MyBaseController {
     private final UserDetailsService userDetailsService;
 
     private final AuthenticationManager manager;
 
     private final JwtHelper helper;
 
-    private final UserService userService;
+    private final CustomMessageSource customMessageSource;
 
-    public AuthController(UserDetailsService userDetailsService, AuthenticationManager manager, JwtHelper helper, UserService userService) {
+    public AuthController(UserDetailsService userDetailsService, AuthenticationManager manager,
+                          JwtHelper helper, CustomMessageSource customMessageSource) {
         this.userDetailsService = userDetailsService;
         this.manager = manager;
         this.helper = helper;
-        this.userService = userService;
+        this.customMessageSource = customMessageSource;
+        this.module = ModuleNameConstants.AUTH;
     }
 
     @PostMapping("/login")
@@ -47,24 +51,17 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    /*@PostMapping("/change-password")
-    public ResponseEntity<Boolean> changePassword(@RequestBody ChangePasswordRequest request, Principal principal) {
-        Boolean success = userService.changePassword(request.getOldPassword(), request.getNewPassword(), principal);
-        return ResponseEntity.ok(success);
-    }*/
-
     private void doAuthenticate(String email, String password) {
-
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
         try {
             manager.authenticate(authentication);
         } catch (BadCredentialsException e) {
-            throw new BadCredentialsException(" Invalid Username or Password !!");
+            throw new BadCredentialsException(customMessageSource.get(Message.CREDENTIAL_INVALID.getCode()));
         }
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public String exceptionHandler() {
-        return "Credentials Invalid !!";
+        return customMessageSource.get(Message.CREDENTIAL_INVALID.getCode());
     }
 }
