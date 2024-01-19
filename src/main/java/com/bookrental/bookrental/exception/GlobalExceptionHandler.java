@@ -13,7 +13,7 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @ExceptionHandler({ResourceNotFoundException.class})
     public ResponseEntity<ApiResponse> resourceNotFoundExceptionHandler(ResourceNotFoundException e) {
         ApiResponse a = new ApiResponse(e.getMessage(), false);
         return new ResponseEntity<>(a, HttpStatus.NOT_FOUND);
@@ -21,7 +21,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({BookStockException.class, MemberOverdewRentalException.class, InvalidTransactionStateException.class,
             BookAlreadyExistsException.class,
-            CategoryAlreadyExistsException.class})
+            CategoryAlreadyExistsException.class,
+            AppException.class
+    })
     public Map<String, String> handleBusinessException(Exception b) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("errorMessage", b.getMessage());

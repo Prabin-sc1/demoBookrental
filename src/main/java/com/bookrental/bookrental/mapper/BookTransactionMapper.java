@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface BookTransactionMapper {
@@ -18,7 +19,7 @@ public interface BookTransactionMapper {
 
     @Select("select tbt.id ,tbt.code ,tbt.from_date as fromDate, tbt.to_date as toDate, tbt.book_id as bookId, tbt.member_id as memberId, " +
             "tbt.rent_status as rentStatus from tbl_book_transaction tbt where id = #{id}")
-    BookTransactionResponse getById(@Param("id") Integer id);
+    Optional<BookTransactionResponse> getById(@Param("id") Integer id);
 
     @Select("select tbt.id ,tbt.code ,tbt.from_date as fromDate, tbt.to_date as toDate, tbt.book_id as bookId, tbt.member_id as memberId, " +
             "tbt.rent_status as rentStatus from tbl_book_transaction tbt where member_id = #{id}")

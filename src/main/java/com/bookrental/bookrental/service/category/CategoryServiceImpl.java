@@ -1,5 +1,8 @@
 package com.bookrental.bookrental.service.category;
 
+import com.bookrental.bookrental.config.CustomMessageSource;
+import com.bookrental.bookrental.constants.ModuleNameConstants;
+import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.exception.AppException;
 import com.bookrental.bookrental.exception.CategoryAlreadyExistsException;
 import com.bookrental.bookrental.exception.ResourceNotFoundException;
@@ -25,6 +28,8 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final NullAwareBeanUtilsBean beanUtils = new NullAwareBeanUtilsBean();
 
+    private final CustomMessageSource customMessageSource;
+
     @Override
     public void createUpdateCateogory(CategoryRequestPojo crp) {
         Category category = new Category();
@@ -36,17 +41,17 @@ public class CategoryServiceImpl implements CategoryService {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new AppException(e.getMessage());
         }
-        category.setActive(true);
         try {
             categoryRepository.save(category);
         } catch (DataIntegrityViolationException e) {
-            throw new CategoryAlreadyExistsException("A category with the name " + category.getName() + " already exists. ");
+            throw new AppException(customMessageSource.get(Message.ALREADY_EXISTS.getCode(), ModuleNameConstants.CATEGORY));
         }
     }
 
     @Override
     public CategoryResponsePojo getCategoryById(Integer id) {
-        return categoryMapper.getSingleCategory(id);
+        return categoryMapper.getSingleCategory(id).orElseThrow(() ->
+                new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.CATEGORY)));
     }
 
     @Override
@@ -56,7 +61,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(Integer id) {
-        this.categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", id));
-        this.categoryRepository.deleteById(id);
+        categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public Category findCategoryById(Integer id) {
+        return categoryRepository.findById(id).orElseThrow(() ->
+                new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.CATEGORY)));
     }
 }

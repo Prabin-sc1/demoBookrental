@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface CategoryMapper {
@@ -14,5 +15,5 @@ public interface CategoryMapper {
 
     @Select("select tc.id ,tc.\"name\" ,tc.description \n" +
             "           from tbl_category tc where tc.is_active and tc.id = #{id}")
-    CategoryResponsePojo getSingleCategory(@Param("id") Integer id);
+    Optional<CategoryResponsePojo> getSingleCategory(@Param("id") Integer id);
 }

@@ -18,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExcelService {
 
-    private final BookTransactionRepository bookTransactionRepository;
     private final BookTransactionMapper bookTransactionMapper;
 
     public ByteArrayInputStream getActualDataData() throws IOException {

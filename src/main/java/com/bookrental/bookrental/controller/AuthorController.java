@@ -31,11 +31,15 @@ public class AuthorController extends MyBaseController {
     @Operation(
             summary = "Create and Update Author",
             description = "This end point used to create and update member",
-            responses = @ApiResponse(responseCode = "200",
-                    content = {
-                            @Content(schema = @Schema(implementation = AuthorRequestPojo.class))
-                    }
-            )
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "success",
+                            content = {
+                                    @Content(schema = @Schema(implementation = AuthorRequestPojo.class))
+                            }
+                    ),
+                    @ApiResponse(responseCode = "400", description = "Bad Request"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized")
+            }
     )
     public ResponseEntity<GlobalApiResponse> createUpdate(@Valid @RequestBody AuthorRequestPojo authorRequestPojo) {
         authorService.createUpdateAuthor(authorRequestPojo);
@@ -82,7 +86,7 @@ public class AuthorController extends MyBaseController {
     )
     public ResponseEntity<GlobalApiResponse> delete(@PathVariable Integer id) {
         authorService.deleteById(id);
-        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.DELETE.getCode(), module),
-                null));
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.DELETE.getCode(), module), null
+        ));
     }
 }

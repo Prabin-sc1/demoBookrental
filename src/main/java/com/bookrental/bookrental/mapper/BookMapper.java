@@ -4,6 +4,7 @@ import com.bookrental.bookrental.pojo.book.BookResponsePojo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface BookMapper {
@@ -43,5 +44,5 @@ public interface BookMapper {
                             many = @Many(select = "getAuthorsByBookId"))
             })
     @Select("SELECT * FROM tbl_book where id =#{id} and is_active")
-    BookResponsePojo getBookById(@Param("id") Integer id);
+    Optional<BookResponsePojo> getBookById(@Param("id") Integer id);
 }

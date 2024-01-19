@@ -15,4 +15,5 @@ public interface BookService {
 
     BookResponsePojo getBookById(Integer id);
 
+    Book findBookById(Integer id);
 }

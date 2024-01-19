@@ -7,7 +7,6 @@ import com.bookrental.bookrental.pojo.author.AuthorResponsePojo;
 import java.util.List;
 
 public interface AuthorService {
-
     void createUpdateAuthor(AuthorRequestPojo authorRequestPojo);
 
     List<AuthorResponsePojo> getAllAuthor();
@@ -15,4 +14,7 @@ public interface AuthorService {
     AuthorResponsePojo getAuthorById(Integer id);
 
     void deleteById(Integer id);
+
+    Author findAuthorById(Integer id);
+
 }

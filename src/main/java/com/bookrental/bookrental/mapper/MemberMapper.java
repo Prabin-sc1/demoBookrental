@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface MemberMapper {
@@ -13,5 +14,5 @@ public interface MemberMapper {
     List<MemberResponsePojo> getAllMember();
 
     @Select("select tm.id, tm.\"name\",tm.email , tm.address, tm.mobile_number as mobileNumber from tbl_member tm where tm.is_active and tm.id = #{id}")
-    MemberResponsePojo getSingleMember(@Param("id") Integer id);
+    Optional<MemberResponsePojo> getSingleMember(@Param("id") Integer id);
 }

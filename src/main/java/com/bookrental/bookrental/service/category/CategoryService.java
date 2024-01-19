@@ -11,9 +11,9 @@ public interface CategoryService {
 
     CategoryResponsePojo getCategoryById(Integer id);
 
-//    List<Category> getAllCategory();
-
     List<CategoryResponsePojo> getAllCategory();
 
     void deleteCategory(Integer id);
+
+    Category findCategoryById(Integer id);
 }

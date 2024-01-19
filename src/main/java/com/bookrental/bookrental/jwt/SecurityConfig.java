@@ -25,17 +25,6 @@ public class SecurityConfig {
     private final UserDetailsService userDetailService;
     private final PasswordEncoder passwordEncoder;
 
-    /*private static final String[] PUBLIC_URLS = {
-            "/api-docs",
-            "/swagger-ui/**",
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/configuration/ui",
-            "/configuration/security",
-            "/webjars/**",
-            "/swagger-ui.html",
-            "/v3/api-docs",
-    };*/
     private static final String[] PUBLIC_URLS = {
             "/api-docs",
             "/swagger-ui/**",
@@ -54,11 +43,11 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authorizeRequests().
                 requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/user/**").hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/member/**").hasAuthority("ROLE_LIBRARIAN")
-                .requestMatchers("/book/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/book/**").hasAuthority("ROLE_LIBRARIAN")
                 .requestMatchers("/author/**").permitAll()
-                .requestMatchers("/excel/**").hasAuthority("ROLE_LIBRARIAN")
+                .requestMatchers("/booktransaction/**").permitAll()
+                .requestMatchers("/excel/**").permitAll()
                 .requestMatchers(PUBLIC_URLS).permitAll()
                 .requestMatchers("/category/**").hasAuthority("ROLE_LIBRARIAN")
                 .anyRequest()

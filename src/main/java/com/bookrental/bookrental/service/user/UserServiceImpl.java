@@ -1,5 +1,8 @@
 package com.bookrental.bookrental.service.user;
 
+import com.bookrental.bookrental.config.CustomMessageSource;
+import com.bookrental.bookrental.constants.ModuleNameConstants;
+import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.exception.AppException;
 import com.bookrental.bookrental.model.User;
 import com.bookrental.bookrental.pojo.user.UserRequestPojo;
@@ -11,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -21,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final CustomMessageSource customMessageSource;
     @Override
     public void createUser(UserRequestPojo user) {
         User u = new User();
@@ -32,10 +37,21 @@ public class UserServiceImpl implements UserService {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new AppException(e.getMessage());
         }
-//        Role r = new Role(1,"ADMIN");
-//        u.setRole(r);
         u.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(u);
+    }
+
+    @Override
+    public Boolean changePassword(String oldPassword, String newPassword, Principal principal) {
+        String username = principal.getName();
+        User user = userRepository.findByEmail(username).orElseThrow(() ->
+                new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.USER)));
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            return false;
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return true;
     }
 
     @Override
@@ -52,4 +68,5 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Integer id) {
 
     }
+
 }

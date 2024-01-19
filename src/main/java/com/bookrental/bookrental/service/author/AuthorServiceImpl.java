@@ -1,5 +1,8 @@
 package com.bookrental.bookrental.service.author;
 
+import com.bookrental.bookrental.config.CustomMessageSource;
+import com.bookrental.bookrental.constants.ModuleNameConstants;
+import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.exception.AppException;
 import com.bookrental.bookrental.exception.CategoryAlreadyExistsException;
 import com.bookrental.bookrental.mapper.AuthorMapper;
@@ -23,6 +26,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorMapper authorMapper;
 
+    private final CustomMessageSource customMessageSource;
+
     @Override
     public void createUpdateAuthor(AuthorRequestPojo authorRequestPojo) {
         Author author = new Author();
@@ -39,9 +44,8 @@ public class AuthorServiceImpl implements AuthorService {
         try {
             authorRepository.save(author);
         } catch (DataIntegrityViolationException e) {
-            throw new CategoryAlreadyExistsException("A author with the email " + author.getEmail() + " already exists.");
+            throw new AppException(customMessageSource.get(Message.ALREADY_EXISTS.getCode(), ModuleNameConstants.AUTHOR));
         }
-
     }
 
     @Override
@@ -59,11 +63,18 @@ public class AuthorServiceImpl implements AuthorService {
 //                get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.AUTHOR)));
 //        return this.modelMapper.map(a, AuthorResponsePojo.class);
         // this is the latest one to do same thing
-        return authorMapper.getSingleAuthor(id);
+        return authorMapper.getSingleAuthor(id).orElseThrow(() ->
+                new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.AUTHOR)));
     }
 
     @Override
     public void deleteById(Integer id) {
         authorRepository.deleteById(id);
+    }
+
+    @Override
+    public Author findAuthorById(Integer id) {
+        return authorRepository.findById(id).orElseThrow(() ->
+                new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.AUTHOR)));
     }
 }

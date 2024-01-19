@@ -14,7 +14,7 @@ import java.util.List;
 
 public class Helper {
 
-    public static String[] HEADERS = {"ID", "Code", "From Date", "To Date", "Book Id", "Member Id", "Rent Status"};
+    public static String[] HEADERS = {"ID", "Code", "From Date", "To Date", "Book", "Member", "Rent Status"};
     public static String SHEET_NAME = "book-transaction";
 
     public static ByteArrayInputStream dataToExcel(List<BookTransactionResponse> list) throws IOException {
@@ -28,6 +28,7 @@ public class Helper {
 
             Sheet sheet = workbook.createSheet(SHEET_NAME);
 
+            sheet.setDefaultColumnWidth(20);
             // create row : header
             Row row = sheet.createRow(0);
             for (int i = 0; i < HEADERS.length; i++) {
@@ -42,8 +43,8 @@ public class Helper {
                 rowIndex++;
                 dataRow.createCell(0).setCellValue(b.getId());
                 dataRow.createCell(1).setCellValue(b.getCode());
-                dataRow.createCell(2).setCellValue(b.getFromDate());
-                dataRow.createCell(3).setCellValue(b.getToDate());
+                dataRow.createCell(2).setCellValue(String.valueOf(b.getFromDate()));
+                dataRow.createCell(3).setCellValue(String.valueOf(b.getToDate()));
                 dataRow.createCell(4).setCellValue(b.getBookName());
                 dataRow.createCell(5).setCellValue(b.getMemberName());
                 dataRow.createCell(6).setCellValue(String.valueOf(b.getRentStatus()));

@@ -23,14 +23,14 @@ public class ExcelController {
         this.excelService = excelService;
     }
 
-//    @RequestMapping("/excell")
     @GetMapping("/excell")
     public ResponseEntity<Resource> download() throws IOException {
         String fileName = "booktransaction.xlsx";
         ByteArrayInputStream bis = excelService.getActualDataData();
         InputStreamResource file = new InputStreamResource(bis);
 
-        ResponseEntity<Resource> body = ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
+        ResponseEntity<Resource> body = ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=" + fileName)
                 .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                 .body(file);
         return body;

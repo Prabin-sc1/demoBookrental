@@ -1,5 +1,8 @@
 package com.bookrental.bookrental.service.booktransaction;
 
+import com.bookrental.bookrental.config.CustomMessageSource;
+import com.bookrental.bookrental.constants.ModuleNameConstants;
+import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.enums.RentType;
 import com.bookrental.bookrental.exception.*;
 import com.bookrental.bookrental.mapper.BookMapper;
@@ -13,6 +16,8 @@ import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
 import com.bookrental.bookrental.repository.BookRepository;
 import com.bookrental.bookrental.repository.BookTransactionRepository;
 import com.bookrental.bookrental.repository.MemberRepository;
+import com.bookrental.bookrental.service.book.BookService;
+import com.bookrental.bookrental.service.member.MemberService;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,11 +37,16 @@ public class BookTransactionServiceImpl implements BookTransactionService {
 
     private final BookRepository bookRepository;
 
-    private final MemberRepository memberRepository;
     private final NullAwareBeanUtilsBean beanUtils = new NullAwareBeanUtilsBean();
 
     private final BookTransactionMapper bookTransactionMapper;
     private final Random r = new Random();
+
+    private final BookService bookService;
+
+    private final CustomMessageSource customMessageSource;
+
+    private final MemberService memberService;
 
     @Override
     public void addBookTransaction(BookRentRequest bookRentRequest) {
@@ -50,15 +60,18 @@ public class BookTransactionServiceImpl implements BookTransactionService {
             throw new AppException(e.getMessage());
         }
 
-        int tempMemberId = bookRentRequest.getMemberId();
-        int tempBookId = bookRentRequest.getBookId();
 
-        Book book = bookRepository.findById(tempBookId).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", tempBookId));
-        Member member = memberRepository.findById(tempMemberId).orElseThrow(() -> new ResourceNotFoundException("Category", "Id", tempMemberId));
+        /*
+        int tempBookId = bookRentRequest.getBookId();
+        Book book = bookRepository.findById(tempBookId).orElseThrow(() ->
+                new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.BOOK)));
+        */
+        Book book = bookService.findBookById(bookRentRequest.getBookId());
+        Member member = memberService.findMemberById(bookRentRequest.getMemberId());
 
         int overdewBooks = bookTransactionMapper.countTransactionsByMemberAndRentStatus(member.getId(), "RENT");
         if (overdewBooks > 0) {
-            throw new MemberOverdewRentalException("Member has already rented this book, so can't rent another same book.");
+            throw new AppException(customMessageSource.get(Message.ALREADY_RENT.getCode(), ModuleNameConstants.TRANSACTION));
         }
 
         bookTransaction.setFromDate(LocalDate.now());
@@ -67,19 +80,23 @@ public class BookTransactionServiceImpl implements BookTransactionService {
         if (Boolean.TRUE.equals(member.isActive())) {
             bookTransaction.setMember(member);
         } else {
-            throw new BookAlreadyExistsException("member is not active");
+//            throw new BookAlreadyExistsException("member is not active");
+            throw new AppException(customMessageSource.get(Message.NOT_ACTIVE.getCode(), ModuleNameConstants.MEMBER));
         }
         if (Boolean.TRUE.equals(book.isActive())) {
             bookTransaction.setBook(book);
         } else {
-            throw new BookAlreadyExistsException("book is not active");
+//            throw new BookAlreadyExistsException("book is not active");
+            throw new AppException(customMessageSource.get(Message.NOT_ACTIVE.getCode(), ModuleNameConstants.BOOK));
+
         }
         bookTransaction.setCode("#" + r.nextInt());
         book.setStockCount(book.getStockCount() - 1);
         bookTransaction.setActive(true);
 
         if (book.getStockCount() < 1)
-            throw new BookStockException("Sorry, we are out of stock!");
+//            throw new BookStockException("Sorry, we are out of stock!");
+            throw new AppException(customMessageSource.get(Message.OUT_OF_STOCK.getCode(), ModuleNameConstants.BOOK));
         else
             bookRepository.save(book);
         bookTransactionRepository.save(bookTransaction);
@@ -101,7 +118,7 @@ public class BookTransactionServiceImpl implements BookTransactionService {
     }
 
     private void updateBookStockCount(Integer id) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "Id", id));
+        Book book = bookService.findBookById(id);
         book.setStockCount(book.getStockCount() + 1);
         bookRepository.save(book);
     }
@@ -120,7 +137,8 @@ public class BookTransactionServiceImpl implements BookTransactionService {
 
     @Override
     public BookTransactionResponse getSingleTransactionById(Integer id) {
-        return bookTransactionMapper.getById(id);
+        return bookTransactionMapper.getById(id).orElseThrow(() ->
+                new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.TRANSACTION)));
     }
 
     @Override

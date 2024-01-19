@@ -1,5 +1,8 @@
 package com.bookrental.bookrental.service.member;
 
+import com.bookrental.bookrental.config.CustomMessageSource;
+import com.bookrental.bookrental.constants.ModuleNameConstants;
+import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.exception.AppException;
 import com.bookrental.bookrental.exception.CategoryAlreadyExistsException;
 import com.bookrental.bookrental.exception.ResourceNotFoundException;
@@ -21,6 +24,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final NullAwareBeanUtilsBean beanUtils = new NullAwareBeanUtilsBean();
     private final MemberMapper memberMapper;
+    private final CustomMessageSource customMessageSource;
 
     @Override
     public void createMember(MemberRequestPojo memberRequestPojo) {
@@ -36,27 +40,29 @@ public class MemberServiceImpl implements MemberService {
         try {
             memberRepository.save(member);
         } catch (Exception e) {
-            throw new CategoryAlreadyExistsException("A member with the email " + member.getEmail() + " already exists.");
+            throw new AppException(customMessageSource.get(Message.ALREADY_EXISTS.getCode(), ModuleNameConstants.MEMBER));
         }
     }
 
     @Override
     public MemberResponsePojo getMemberById(Integer id) {
-//        Member m = memberRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Member", "Id", id));
-//        return modelMapper.map(m, MemberResponsePojo.class);
-        return memberMapper.getSingleMember(id);
+        return memberMapper.getSingleMember(id).orElseThrow(() ->
+                new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.MEMBER)));
     }
 
     @Override
     public List<MemberResponsePojo> getAllMember() {
-//        List<Member> l = memberRepository.findAll();
-//        return l.stream().map(e -> modelMapper.map(e, MemberResponsePojo.class)).collect(Collectors.toList());
         return memberMapper.getAllMember();
     }
 
     @Override
     public void deleteMember(Integer id) {
-        memberRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Member", "Id", id));
         memberRepository.deleteById(id);
+    }
+
+    @Override
+    public Member findMemberById(Integer id) {
+        return memberRepository.findById(id).orElseThrow(() ->
+                new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.MEMBER)));
     }
 }

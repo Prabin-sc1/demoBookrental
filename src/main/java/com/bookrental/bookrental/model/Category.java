@@ -1,5 +1,6 @@
 package com.bookrental.bookrental.model;
 
+import com.bookrental.bookrental.generic.AuditActiveAbstract;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tbl_category")
-public class Category {
+public class Category extends AuditActiveAbstract {
     @Id
     @SequenceGenerator(name = "category_seq_gen", sequenceName = "category_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_seq_gen")
@@ -29,5 +30,4 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Book> bookList = new ArrayList<>();
-    private boolean isActive;
 }
