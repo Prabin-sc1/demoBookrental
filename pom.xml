@@ -11,7 +11,7 @@
     <groupId>com.bookrental</groupId>
     <artifactId>BookRental</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>BookRental</name>
     <description>BookRental</description>
     <properties>
