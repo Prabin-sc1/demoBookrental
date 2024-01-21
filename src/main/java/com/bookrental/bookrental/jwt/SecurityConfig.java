@@ -8,6 +8,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,22 +36,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(csrf -> csrf.disable())
-                .authorizeRequests().
-                requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/member/**").hasAuthority("ROLE_LIBRARIAN")
-                .requestMatchers("/user/**").permitAll()
-                .requestMatchers("/book/**").hasAuthority("ROLE_LIBRARIAN")
-                .requestMatchers("/author/**").hasAuthority("ROLE_LIBRARIAN")
-                .requestMatchers("/booktransaction/**").permitAll()
-                .requestMatchers("/excel/**").hasAuthority("ROLE_LIBRARIAN")
-                .requestMatchers("/category/**").hasAuthority("ROLE_LIBRARIAN")
-                .requestMatchers(PUBLIC_URLS).permitAll()
-                .anyRequest()
-                .authenticated()
-                .and().exceptionHandling(ex -> ex.authenticationEntryPoint(point))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+        http.csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth ->
+                        auth.requestMatchers("/member/**", "/author/**", "/book/**", "/category/**", "/excel/**").hasRole("LIBRARIAN")
+                                .requestMatchers("/user/**").hasRole("ADMIN")
+                                .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers(PUBLIC_URLS).permitAll()
+                                .anyRequest().authenticated()).authenticationProvider(authenticationProvider())
+                .exceptionHandling(e -> e.authenticationEntryPoint(point))
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
