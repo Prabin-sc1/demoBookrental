@@ -26,16 +26,10 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
 
     private static final String[] PUBLIC_URLS = {
-            "/api-docs",
             "/swagger-ui/**",
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/configuration/ui",
-            "/configuration/security",
             "/webjars/**",
-            "/swagger-ui.html",
-            "/v3/api-docs",
-            "/webjars/**"
+            "/swagger-resources/**",
+            "/v3/api-docs"
     };
 
     @Bean

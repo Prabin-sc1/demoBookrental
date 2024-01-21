@@ -17,23 +17,28 @@ spring:
       format_sql: true
     open-in-view: false
 
+  profiles:
+    active: ${ENV:dev}
+
 server:
   port: 9889
   servlet:
     context-path: /book-rental
 
-security:
-  user:
-    name: prabin
-    password: prabin
 
-springdoc:
-  swagger-ui:
-    urls:
-      - url: "/book-rental/api-docs"
-        name: "book-rental"
-    enabled: true
-    path: /swagger-ui.html
-  api-docs:
-    path: /api-docs
-    version: openapi_3_1
+#security:
+#  user:
+#    name: prabin
+#    password: prabin
+
+#springdoc:
+#  swagger-ui:
+#    urls:
+#      - url: "/book-rental/v3/api-docs"
+#        name: "book-rental"
+#    enabled: true
+#    path: /swagger-ui.html
+#  api-docs:
+#    path: /v3/api-docs
+#    version: openapi_3_1
+#    enabled: true

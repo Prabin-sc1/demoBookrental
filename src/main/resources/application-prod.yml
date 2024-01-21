@@ -1,12 +1,12 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/bookrental
+    url: jdbc:postgresql://monorail.proxy.rlwy.net:27072/railway
     username: postgres
-    password: prabin
+    password: 3FB*ae4Ea6cc2cBgFef14g6FfA*d*42*
     driver-class-name: org.postgresql.Driver
 
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: update
     properties:
@@ -22,19 +22,4 @@ server:
   servlet:
     context-path: /book-rental
 
-security:
-  user:
-    name: prabin
-    password: prabin
 
-#springdoc:
-#  swagger-ui:
-#    urls:
-#      - url: "/book-rental/v3/api-docs"
-#        name: "book-rental"
-#    enabled: true
-#    path: /swagger-ui.html
-#  api-docs:
-#    path: /v3/api-docs
-#    version: openapi_3_1
-#    enabled: true
