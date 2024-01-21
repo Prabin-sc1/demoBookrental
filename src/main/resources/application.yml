@@ -8,6 +8,7 @@ spring:
     password: kw0Wiol8rH75IBdYCFSe8BAdzI9mbNqj
     driver-class-name: org.postgresql.Driver
   #testing
+  #testing
 
   jpa:
     show-sql: true
