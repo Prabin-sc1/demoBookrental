@@ -21,10 +21,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                 version = "1.0.0",
                 description = "Book Rental OPEN API documentation"
         ),
-        servers = @Server(
-                url = "http://localhost:9889/book-rental/",
-                description = "Book Rental OPEN API"
-        )
+        servers = {
+                @Server(
+                        url = "http://localhost:9889/book-rental/",
+                        description = "Book Rental OPEN API"
+                ),
+                @Server(
+                        url = "https://demobookrental-production.up.railway.app/",
+                        description = "Book Rental Railway"
+                )
+        }
         , security = @SecurityRequirement(name = "bearerAuth")
 )
 @SecurityScheme(name = "bearerAuth", scheme = "bearer", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
