@@ -40,6 +40,7 @@ public class AuthorServiceImpl implements AuthorService {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new AppException(e.getMessage());
         }
+        author.setEmail(authorRequestPojo.getEmail().toLowerCase());
 
         try {
             authorRepository.save(author);

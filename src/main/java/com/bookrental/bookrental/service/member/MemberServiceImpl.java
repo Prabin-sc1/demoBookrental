@@ -37,6 +37,7 @@ public class MemberServiceImpl implements MemberService {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new AppException(e.getMessage());
         }
+        member.setEmail(memberRequestPojo.getEmail().toLowerCase());
         try {
             memberRepository.save(member);
         } catch (Exception e) {

@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class UserController extends MyBaseController {
                     }
             )
     )
-    public ResponseEntity<GlobalApiResponse> create(@RequestBody UserRequestPojo user) {
+    public ResponseEntity<GlobalApiResponse> create(@RequestBody @Valid UserRequestPojo user) {
         userService.createUser(user);
         return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module), null));
     }

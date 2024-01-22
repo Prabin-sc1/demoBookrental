@@ -28,8 +28,8 @@ public class Book extends AuditActiveAbstract {
 
     private Integer noOfPages;
 
-    @Column(columnDefinition = "VARCHAR(30)")
-    private Integer isbn;
+    @Column(unique = true)
+    private Long isbn;
     private Double rating;
     private Integer stockCount;
     private LocalDate publishedDate;

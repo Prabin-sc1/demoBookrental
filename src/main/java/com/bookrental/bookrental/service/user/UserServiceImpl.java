@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.InvocationTargetException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -41,8 +42,15 @@ public class UserServiceImpl implements UserService {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new AppException(e.getMessage());
         }
+
+        u.setEmail(user.getEmail().toLowerCase());
         u.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(u);
+
+        try {
+            userRepository.save(u);
+        } catch (Exception e) {
+            throw new AppException(customMessageSource.get(Message.ALREADY_EXISTS.getCode(), ModuleNameConstants.USER));
+        }
     }
 
     @Override

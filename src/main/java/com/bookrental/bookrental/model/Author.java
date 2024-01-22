@@ -22,10 +22,8 @@ public class Author extends AuditActiveAbstract {
     @SequenceGenerator(name = "author_seq_gen", sequenceName = "author_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_seq_gen")
     private Integer id;
-    @Column(nullable = false)
     private String name;
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String email;
-    @Column(nullable = false)
     private String mobileNumber;
 }

@@ -37,7 +37,6 @@ public class BookServiceImpl implements BookService {
 
     private final CategoryService categoryService;
 
-    private final AuthorService authorService;
 
     @Override
     public void createUpdateBook(BookRequestPojo book) {
@@ -47,7 +46,6 @@ public class BookServiceImpl implements BookService {
         if (book.getId() != null) {
             b = bookRepository.findById(book.getId()).orElse(b);
         }
-
         try {
             utilsBean.copyProperties(b, book);
         } catch (IllegalAccessException | InvocationTargetException e) {

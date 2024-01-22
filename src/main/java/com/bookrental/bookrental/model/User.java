@@ -24,18 +24,9 @@ public class User extends AuditActiveAbstract implements UserDetails {
     @SequenceGenerator(name = "user_seq_gen", sequenceName = "user_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_gen")
     private Integer id;
+    @Column(unique = true)
     private String email;
     private String password;
-
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(name = "tbl_user_role", joinColumns = {
-//            @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_tbl_user_role_tbl_user"))
-//    },
-//            inverseJoinColumns = {
-//                    @JoinColumn(name = "role_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_tbl_user_role_tbl_role"))
-//            }
-//    )
-//    private Set<Role> roles = new HashSet<>();
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "tbl_user_role", joinColumns = {
@@ -47,10 +38,6 @@ public class User extends AuditActiveAbstract implements UserDetails {
     )
     private Role role = new Role();
 
-    /*@Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }*/
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
