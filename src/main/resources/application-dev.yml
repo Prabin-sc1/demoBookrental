@@ -1,12 +1,12 @@
 spring:
-#  datasource:
-    #    url: jdbc:postgresql://localhost:5432/bookrental
-    #    username: postgres
-    #    password: prabin
-#    url: jdbc:postgresql://dpg-cmme4q21hbls73cfe450-a.singapore-postgres.render.com/bookrental
-#    username: bookrental_user
-#    password: kw0Wiol8rH75IBdYCFSe8BAdzI9mbNqj
-#    driver-class-name: org.postgresql.Driver
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bookrental
+    username: postgres
+    password: prabin
+    #    url: jdbc:postgresql://dpg-cmme4q21hbls73cfe450-a.singapore-postgres.render.com/bookrental
+    #    username: bookrental_user
+    #    password: kw0Wiol8rH75IBdYCFSe8BAdzI9mbNqj
+    driver-class-name: org.postgresql.Driver
   #testing
   #testing
 
@@ -22,13 +22,10 @@ spring:
       format_sql: true
     open-in-view: false
 
-  profiles:
-    active: ${ENV:dev}
-
-#server:
-#  port: 9889
-#  servlet:
-#    context-path: /book-rental
+server:
+  port: 9889
+  servlet:
+    context-path: /book-rental
 
 
 #security:
