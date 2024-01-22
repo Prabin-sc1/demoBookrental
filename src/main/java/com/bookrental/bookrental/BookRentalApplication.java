@@ -27,7 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                         description = "Book Rental OPEN API"
                 ),
                 @Server(
-                        url = "https://demobookrental-production.up.railway.app/book-rental/",
+                        url = "https://demobookrental-production.up.railway.app/",
                         description = "Book Rental Railway"
                 )
         }
