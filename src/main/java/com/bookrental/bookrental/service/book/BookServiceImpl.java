@@ -46,17 +46,12 @@ public class BookServiceImpl implements BookService {
         if (book.getId() != null) {
             b = bookRepository.findById(book.getId()).orElse(b);
         }
+
         try {
             utilsBean.copyProperties(b, book);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new AppException(e.getMessage());
         }
-/*
-
-        Integer categoryId = book.getCategoryId();
-        Category tempCategory = categoryRepository.findById(categoryId).orElseThrow(() ->
-                new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.CATEGORY)));
-*/
 
         Category tempCategory = categoryService.findCategoryById(book.getCategoryId());
 

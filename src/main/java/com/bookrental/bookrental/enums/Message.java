@@ -14,6 +14,7 @@ public enum Message {
     PASSWORD_NOT_MATCH("password.not.match"),
     DELETE("success.delete"),
     ID_NOT_FOUND("id.notfound"),
+    INVALID_CODE_MEMBER_BOOK("invalid.code.member.book"),
     USER_NOT_FOUND("user.notfound"),
     ALREADY_EXISTS("already.exists"),
     ALREADY_RENT("already.rent"),

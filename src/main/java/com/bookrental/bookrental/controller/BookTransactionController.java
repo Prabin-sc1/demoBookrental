@@ -43,8 +43,9 @@ public class BookTransactionController extends MyBaseController {
             )
     )
     public ResponseEntity<GlobalApiResponse> rentTransaction(@RequestBody @Valid BookRentRequest bookRentRequest) {
-        bookTransactionService.addBookTransaction(bookRentRequest);
-        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module), null));
+//        bookTransactionService.addBookTransaction(bookRentRequest);
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),
+                bookTransactionService.addBookTransaction(bookRentRequest)));
     }
 
     @PostMapping("/return")

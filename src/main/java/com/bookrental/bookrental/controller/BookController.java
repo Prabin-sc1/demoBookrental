@@ -57,6 +57,7 @@ public class BookController extends MyBaseController {
         return ResponseEntity.ok(successResponse(customMessageSource.get(Message.RETRIEVE.getCode(), module), bookService.getBookById(id)));
     }
 
+
     @GetMapping
     @Operation(
             summary = "Retrieve all books",

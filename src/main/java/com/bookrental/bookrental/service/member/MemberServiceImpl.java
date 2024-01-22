@@ -4,8 +4,6 @@ import com.bookrental.bookrental.config.CustomMessageSource;
 import com.bookrental.bookrental.constants.ModuleNameConstants;
 import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.exception.AppException;
-import com.bookrental.bookrental.exception.CategoryAlreadyExistsException;
-import com.bookrental.bookrental.exception.ResourceNotFoundException;
 import com.bookrental.bookrental.mapper.MemberMapper;
 import com.bookrental.bookrental.model.Member;
 import com.bookrental.bookrental.pojo.member.MemberRequestPojo;

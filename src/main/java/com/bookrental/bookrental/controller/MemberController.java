@@ -53,7 +53,8 @@ public class MemberController extends MyBaseController {
             )
     )
     public ResponseEntity<GlobalApiResponse> memberById(@PathVariable Integer id) {
-        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.RETRIEVE.getCode(), module), memberService.getMemberById(id)));
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.RETRIEVE.getCode(), module),
+                memberService.getMemberById(id)));
     }
 
     @GetMapping

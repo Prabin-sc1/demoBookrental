@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponsePojo getUserById(Integer id) {
-        return userMapper.getSingleUser(id).orElseThrow(() -> new AppException("User not found"));
+        return userMapper.getSingleUser(id).orElseThrow(() -> new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.USER)));
     }
 
     @Override

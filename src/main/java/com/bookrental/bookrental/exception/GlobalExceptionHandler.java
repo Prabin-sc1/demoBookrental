@@ -1,6 +1,7 @@
 package com.bookrental.bookrental.exception;
 
-import com.bookrental.bookrental.payloads.ApiResponse;
+import com.bookrental.bookrental.enums.ResponseStatus;
+import com.bookrental.bookrental.generic.GlobalApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -13,31 +14,31 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler({ResourceNotFoundException.class})
-    public ResponseEntity<ApiResponse> resourceNotFoundExceptionHandler(ResourceNotFoundException e) {
-        ApiResponse a = new ApiResponse(e.getMessage(), false);
-        return new ResponseEntity<>(a, HttpStatus.NOT_FOUND);
-    }
+    private static final ResponseStatus API_FAIL_STATUS = ResponseStatus.FAIL;
 
-    @ExceptionHandler({BookStockException.class, MemberOverdewRentalException.class, InvalidTransactionStateException.class,
-            BookAlreadyExistsException.class,
-            CategoryAlreadyExistsException.class,
-            AppException.class
-    })
-    public Map<String, String> handleBusinessException(Exception b) {
-        Map<String, String> errorMap = new HashMap<>();
-        errorMap.put("errorMessage", b.getMessage());
-        return errorMap;
+    @ExceptionHandler({AppException.class})
+    public ResponseEntity<GlobalApiResponse> handleBusinessExceptionAgain(AppException b) {
+        GlobalApiResponse globalApiResponse = new GlobalApiResponse();
+        globalApiResponse.setResponseStatus(API_FAIL_STATUS);
+        globalApiResponse.setMessage(b.getMessage());
+        globalApiResponse.setData(null);
+        return new ResponseEntity<>(globalApiResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<GlobalApiResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         Map<String, String> resp = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach(e -> {
             String fieldName = ((FieldError) e).getField();
             String message = e.getDefaultMessage();
             resp.put(fieldName, message);
         });
-        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+
+        GlobalApiResponse globalApiResponse = new GlobalApiResponse();
+        globalApiResponse.setResponseStatus(API_FAIL_STATUS);
+        globalApiResponse.setMessage(resp.toString());
+        globalApiResponse.setData(null);
+        return new ResponseEntity<>(globalApiResponse, HttpStatus.BAD_REQUEST);
     }
+
 }

@@ -23,7 +23,7 @@ public class ExcelController {
         this.excelService = excelService;
     }
 
-    @GetMapping("/excell")
+    @GetMapping("/transaction-details")
     public ResponseEntity<Resource> download() throws IOException {
         String fileName = "booktransaction.xlsx";
         ByteArrayInputStream bis = excelService.getActualDataData();

@@ -4,8 +4,6 @@ import com.bookrental.bookrental.config.CustomMessageSource;
 import com.bookrental.bookrental.constants.ModuleNameConstants;
 import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.exception.AppException;
-import com.bookrental.bookrental.exception.CategoryAlreadyExistsException;
-import com.bookrental.bookrental.exception.ResourceNotFoundException;
 import com.bookrental.bookrental.mapper.CategoryMapper;
 import com.bookrental.bookrental.model.Category;
 import com.bookrental.bookrental.pojo.category.CategoryRequestPojo;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

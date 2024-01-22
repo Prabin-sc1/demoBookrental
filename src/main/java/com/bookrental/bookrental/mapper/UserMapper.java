@@ -13,8 +13,13 @@ import java.util.Optional;
 public interface UserMapper {
     @Select("select tu.id, tu.email from tbl_user tu")
     List<UserResponsePojo> allUser();
+//
+//    @Select("select tu.id, tu.email from tbl_user tu where tu.id = #{id}")
+//    Optional<UserResponsePojo> getSingleUser(@Param("id") Integer id);
+
 
     @Select("select tu.id, tu.email from tbl_user tu where tu.id = #{id}")
     Optional<UserResponsePojo> getSingleUser(@Param("id") Integer id);
+
 
 }

@@ -4,7 +4,6 @@ import com.bookrental.bookrental.config.CustomMessageSource;
 import com.bookrental.bookrental.constants.ModuleNameConstants;
 import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.exception.AppException;
-import com.bookrental.bookrental.exception.CategoryAlreadyExistsException;
 import com.bookrental.bookrental.mapper.AuthorMapper;
 import com.bookrental.bookrental.model.Author;
 import com.bookrental.bookrental.pojo.author.AuthorRequestPojo;
@@ -64,8 +63,7 @@ public class AuthorServiceImpl implements AuthorService {
 //                get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.AUTHOR)));
 //        return this.modelMapper.map(a, AuthorResponsePojo.class);
         // this is the latest one to do same thing
-        return authorMapper.getSingleAuthor(id).orElseThrow(() ->
-                new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.AUTHOR)));
+        return authorMapper.getSingleAuthor(id);
     }
 
     @Override

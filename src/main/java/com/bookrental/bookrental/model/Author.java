@@ -2,14 +2,10 @@ package com.bookrental.bookrental.model;
 
 import com.bookrental.bookrental.generic.AuditActiveAbstract;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter

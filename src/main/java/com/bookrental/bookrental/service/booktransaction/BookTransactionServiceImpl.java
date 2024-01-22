@@ -4,8 +4,7 @@ import com.bookrental.bookrental.config.CustomMessageSource;
 import com.bookrental.bookrental.constants.ModuleNameConstants;
 import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.enums.RentType;
-import com.bookrental.bookrental.exception.*;
-import com.bookrental.bookrental.mapper.BookMapper;
+import com.bookrental.bookrental.exception.AppException;
 import com.bookrental.bookrental.mapper.BookTransactionMapper;
 import com.bookrental.bookrental.model.Book;
 import com.bookrental.bookrental.model.BookTransaction;
@@ -15,7 +14,6 @@ import com.bookrental.bookrental.pojo.returnn.BookReturnRequest;
 import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
 import com.bookrental.bookrental.repository.BookRepository;
 import com.bookrental.bookrental.repository.BookTransactionRepository;
-import com.bookrental.bookrental.repository.MemberRepository;
 import com.bookrental.bookrental.service.book.BookService;
 import com.bookrental.bookrental.service.member.MemberService;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
@@ -49,7 +47,7 @@ public class BookTransactionServiceImpl implements BookTransactionService {
     private final MemberService memberService;
 
     @Override
-    public void addBookTransaction(BookRentRequest bookRentRequest) {
+    public String addBookTransaction(BookRentRequest bookRentRequest) {
         BookTransaction bookTransaction = new BookTransaction();
         if (bookRentRequest.getId() != null)
             bookTransaction = bookTransactionRepository.findById(bookRentRequest.getId()).orElse(bookTransaction);
@@ -60,16 +58,10 @@ public class BookTransactionServiceImpl implements BookTransactionService {
             throw new AppException(e.getMessage());
         }
 
-
-        /*
-        int tempBookId = bookRentRequest.getBookId();
-        Book book = bookRepository.findById(tempBookId).orElseThrow(() ->
-                new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.BOOK)));
-        */
         Book book = bookService.findBookById(bookRentRequest.getBookId());
         Member member = memberService.findMemberById(bookRentRequest.getMemberId());
 
-        int overdewBooks = bookTransactionMapper.countTransactionsByMemberAndRentStatus(member.getId(), "RENT");
+        int overdewBooks = bookTransactionMapper.countTransactionsByMemberAndRentStatus(member.getId(), String.valueOf(RentType.RENT));
         if (overdewBooks > 0) {
             throw new AppException(customMessageSource.get(Message.ALREADY_RENT.getCode(), ModuleNameConstants.TRANSACTION));
         }
@@ -80,13 +72,11 @@ public class BookTransactionServiceImpl implements BookTransactionService {
         if (Boolean.TRUE.equals(member.isActive())) {
             bookTransaction.setMember(member);
         } else {
-//            throw new BookAlreadyExistsException("member is not active");
             throw new AppException(customMessageSource.get(Message.NOT_ACTIVE.getCode(), ModuleNameConstants.MEMBER));
         }
         if (Boolean.TRUE.equals(book.isActive())) {
             bookTransaction.setBook(book);
         } else {
-//            throw new BookAlreadyExistsException("book is not active");
             throw new AppException(customMessageSource.get(Message.NOT_ACTIVE.getCode(), ModuleNameConstants.BOOK));
 
         }
@@ -95,11 +85,11 @@ public class BookTransactionServiceImpl implements BookTransactionService {
         bookTransaction.setActive(true);
 
         if (book.getStockCount() < 1)
-//            throw new BookStockException("Sorry, we are out of stock!");
             throw new AppException(customMessageSource.get(Message.OUT_OF_STOCK.getCode(), ModuleNameConstants.BOOK));
         else
             bookRepository.save(book);
         bookTransactionRepository.save(bookTransaction);
+        return bookTransaction.getCode();
     }
 
     @Override
@@ -114,7 +104,7 @@ public class BookTransactionServiceImpl implements BookTransactionService {
                 bookReturnRequest.getCode(),
                 bookReturnRequest.getMemberId(),
                 bookReturnRequest.getBookId()
-        ).orElseThrow(() -> new InvalidTransactionStateException("Invalid code, member ID, or book ID"));
+        ).orElseThrow(() -> new AppException(customMessageSource.get(Message.INVALID_CODE_MEMBER_BOOK.getCode(), ModuleNameConstants.TRANSACTION)));
     }
 
     private void updateBookStockCount(Integer id) {

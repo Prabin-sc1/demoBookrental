@@ -69,7 +69,9 @@ public class CategoryController extends MyBaseController {
             )
     )
     public ResponseEntity<GlobalApiResponse> getCategoryById(@PathVariable Integer id) {
-        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.RETRIEVE.getCode(), module), categoryService.getCategoryById(id)));
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.RETRIEVE.getCode(), module),
+                categoryService.getCategoryById(id)));
+
     }
 
     @DeleteMapping("/{id}")

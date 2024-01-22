@@ -7,7 +7,7 @@ import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
 import java.util.List;
 
 public interface BookTransactionService {
-    void addBookTransaction(BookRentRequest bookRentRequest);
+    String addBookTransaction(BookRentRequest bookRentRequest);
 
     void returnBookTransaction(BookReturnRequest bookReturnRequest);
 
