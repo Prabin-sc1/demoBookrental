@@ -3,6 +3,7 @@ package com.bookrental.bookrental.controller;
 import com.bookrental.bookrental.config.CustomMessageSource;
 import com.bookrental.bookrental.constants.ModuleNameConstants;
 import com.bookrental.bookrental.enums.Message;
+import com.bookrental.bookrental.generic.GlobalApiResponse;
 import com.bookrental.bookrental.jwt.JwtHelper;
 import com.bookrental.bookrental.pojo.jwt.JwtRequestPojo;
 import com.bookrental.bookrental.pojo.jwt.JwtResponsePojo;
@@ -39,7 +40,7 @@ public class AuthController extends MyBaseController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponsePojo> login(@RequestBody JwtRequestPojo request) {
+    public ResponseEntity<GlobalApiResponse> login(@RequestBody JwtRequestPojo request) {
         this.doAuthenticate(request.getEmail(), request.getPassword());
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
@@ -48,7 +49,8 @@ public class AuthController extends MyBaseController {
         JwtResponsePojo response = JwtResponsePojo.builder()
                 .jwtToken(token)
                 .username(userDetails.getUsername()).build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),
+                response));
     }
 
     private void doAuthenticate(String email, String password) {

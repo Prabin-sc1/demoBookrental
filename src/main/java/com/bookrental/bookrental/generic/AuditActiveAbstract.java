@@ -8,7 +8,7 @@ import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
 @JsonIgnoreProperties
-public abstract class AuditActiveAbstract {
+public abstract class AuditActiveAbstract extends AuditablaBase {
     @Column(name = "is_active")
     @JsonProperty("isActive")
     private Boolean isActive = true;

@@ -38,7 +38,6 @@ public class CategoryServiceImpl implements CategoryService {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new AppException(e.getMessage());
         }
-
         try {
             categoryRepository.save(category);
         } catch (DataIntegrityViolationException e) {

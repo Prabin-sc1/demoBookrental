@@ -24,6 +24,7 @@ public class Category extends AuditActiveAbstract {
     private Integer id;
     @Column(nullable = false, length = 100, unique = true)
     private String name;
+
     @Column(nullable = false, length = 1000)
     private String description;
 

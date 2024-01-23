@@ -15,7 +15,11 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tbl_book")
+@Table(name = "tbl_book", uniqueConstraints = {
+        @UniqueConstraint(name = "uc_book", columnNames = {
+                "name","isbn"
+        })
+})
 public class Book extends AuditActiveAbstract {
 
     @Id
@@ -23,12 +27,9 @@ public class Book extends AuditActiveAbstract {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_seq_gen")
     private Integer id;
 
-    @Column(columnDefinition = "VARCHAR(100)", unique = true)
+    @Column(columnDefinition = "VARCHAR(100)")
     private String name;
-
     private Integer noOfPages;
-
-    @Column(unique = true)
     private Long isbn;
     private Double rating;
     private Integer stockCount;

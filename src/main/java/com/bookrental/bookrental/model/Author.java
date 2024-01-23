@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tbl_author")
-public class Author extends AuditActiveAbstract {
+public class Author extends AuditActiveAbstract  {
     @Id
     @SequenceGenerator(name = "author_seq_gen", sequenceName = "author_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_seq_gen")
