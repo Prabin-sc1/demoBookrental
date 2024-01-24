@@ -28,8 +28,6 @@ public class BookTransaction extends AuditActiveAbstract {
     private LocalDate fromDate;
     @Column(nullable = false)
     private LocalDate toDate;
-//    private Boolean activeClosed;
-
     @Column(name = "rent_status")
     @Enumerated(EnumType.STRING)
     private RentType rentStatus;

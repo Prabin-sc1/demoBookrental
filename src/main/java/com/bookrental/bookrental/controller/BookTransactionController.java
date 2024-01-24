@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -43,10 +44,17 @@ public class BookTransactionController extends MyBaseController {
             )
     )
     public ResponseEntity<GlobalApiResponse> rentTransaction(@RequestBody @Valid BookRentRequest bookRentRequest) {
-//        bookTransactionService.addBookTransaction(bookRentRequest);
         return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),
                 bookTransactionService.addBookTransaction(bookRentRequest)));
     }
+
+    @PostMapping("/upload")
+    public ResponseEntity<GlobalApiResponse> saveTransaction(@RequestParam("file") MultipartFile multipartFile) {
+        bookTransactionService.save(multipartFile);
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),
+                null));
+    }
+
 
     @PostMapping("/return")
     @Operation(
@@ -118,4 +126,5 @@ public class BookTransactionController extends MyBaseController {
     public ResponseEntity<List<BookTransactionResponse>> getAllTransactionByMemberId(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(bookTransactionService.getAllTransactionByMember(id));
     }
+
 }

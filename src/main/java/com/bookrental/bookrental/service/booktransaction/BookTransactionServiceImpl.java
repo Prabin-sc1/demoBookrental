@@ -5,13 +5,17 @@ import com.bookrental.bookrental.constants.ModuleNameConstants;
 import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.enums.RentType;
 import com.bookrental.bookrental.exception.AppException;
+import com.bookrental.bookrental.helpers.Helper;
 import com.bookrental.bookrental.mapper.BookTransactionMapper;
+import com.bookrental.bookrental.model.Author;
 import com.bookrental.bookrental.model.Book;
 import com.bookrental.bookrental.model.BookTransaction;
 import com.bookrental.bookrental.model.Member;
+import com.bookrental.bookrental.pojo.book.BookRequestPojo;
 import com.bookrental.bookrental.pojo.rent.BookRentRequest;
 import com.bookrental.bookrental.pojo.returnn.BookReturnRequest;
 import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
+import com.bookrental.bookrental.repository.AuthorRepository;
 import com.bookrental.bookrental.repository.BookRepository;
 import com.bookrental.bookrental.repository.BookTransactionRepository;
 import com.bookrental.bookrental.service.book.BookService;
@@ -21,7 +25,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.util.List;
@@ -45,6 +51,8 @@ public class BookTransactionServiceImpl implements BookTransactionService {
     private final CustomMessageSource customMessageSource;
 
     private final MemberService memberService;
+
+    private final AuthorRepository authorRepository;
 
     @Override
     public String addBookTransaction(BookRentRequest bookRentRequest) {
@@ -140,4 +148,15 @@ public class BookTransactionServiceImpl implements BookTransactionService {
     public List<BookTransactionResponse> getAllTransactionByMember(Integer id) {
         return bookTransactionMapper.getAllTransactionByMemberId(id);
     }
+
+    public void save(MultipartFile file) {
+        try {
+            List<Author> list = Helper.convertExcelToList(Author.class, file.getInputStream());
+            this.authorRepository.saveAll(list);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
