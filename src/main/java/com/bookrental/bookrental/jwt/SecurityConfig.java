@@ -40,8 +40,8 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/member/**", "/author/**", "/book/**", "/booktransaction/**", "/category/**", "/excel/**").permitAll()
-                                .requestMatchers("/user/**").permitAll()
+                        auth.requestMatchers("/member/**", "/author/**", "/book/**", "/booktransaction/**", "/category/**", "/excel/**").hasRole("LIBRARIAN")
+                                .requestMatchers("/user/**").hasRole("ADMIN")
                                 .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers(PUBLIC_URLS).permitAll()
                                 .anyRequest().authenticated()).authenticationProvider(authenticationProvider())
