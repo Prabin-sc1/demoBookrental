@@ -21,32 +21,24 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ExcelService {
-//    public static String[] HEADERS = {"id", "name", "noOfPages", "isbn", "rating", "stockCount", "publishedDate", "photo"};
+    private final AuthorRepository authorRepository;
+    public static String SHEET_NAME = "book-transaction";
 
-
-    public static String[] getHeaders(Class<?> clazz) {
+    public static String[] getHeaders(Class<?> className) {
         List<String> headers = new ArrayList<>();
-
-        // Get all of the fields in the class
-        Field[] fields = clazz.getDeclaredFields();
-
-        // Iterate over the fields and add the field names to the list of headers
+        Field[] fields = className.getDeclaredFields();
         for (Field field : fields) {
             headers.add(field.getName());
         }
-        // Convert the list of headers to an array
-        String[] headersArray = headers.toArray(new String[headers.size()]);
-        return headersArray;
+        return headers.toArray(new String[headers.size()]);
     }
 
-    public static String SHEET_NAME = "book-transaction";
-
-    private final AuthorRepository authorRepository;
     public ByteArrayInputStream getActualDataData() throws IOException {
         List<Author> all = authorRepository.findAll();
         ByteArrayInputStream byteArrayInputStream = Helper.dataToExcel(all, SHEET_NAME, getHeaders(Author.class));

@@ -157,6 +157,4 @@ public class BookTransactionServiceImpl implements BookTransactionService {
             e.printStackTrace();
         }
     }
-
-
 }

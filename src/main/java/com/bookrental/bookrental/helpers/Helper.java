@@ -1,5 +1,6 @@
 package com.bookrental.bookrental.helpers;
 
+import com.bookrental.bookrental.exception.AppException;
 import com.bookrental.bookrental.model.BookTransaction;
 import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
 import org.apache.commons.beanutils.BeanUtils;
@@ -175,9 +176,8 @@ public class Helper {
         try {
 
             Workbook workbook = new XSSFWorkbook(is);
-            Sheet sheet = workbook.getSheet("book-transaction");
+            Sheet sheet = workbook.getSheetAt(0);
             int rowNumber = 0;
-
             Iterator<Row> iterator = sheet.iterator();
             while (iterator.hasNext()) {
                 Row row = iterator.next();
