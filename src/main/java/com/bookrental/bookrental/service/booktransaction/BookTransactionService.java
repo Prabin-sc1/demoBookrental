@@ -3,6 +3,7 @@ package com.bookrental.bookrental.service.booktransaction;
 import com.bookrental.bookrental.pojo.rent.BookRentRequest;
 import com.bookrental.bookrental.pojo.returnn.BookReturnRequest;
 import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,5 +18,7 @@ public interface BookTransactionService {
 
     void deleteTransactionById(Integer id);
 
-   List<BookTransactionResponse> getAllTransactionByMember(Integer id);
+    List<BookTransactionResponse> getAllTransactionByMember(Integer id);
+
+    void save(MultipartFile file);
 }

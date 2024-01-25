@@ -14,4 +14,8 @@ public interface AuthorRepository extends JpaRepository<Author, Integer> {
     @Modifying
     @Query(value = "update tbl_author set is_active = false where id = :id", nativeQuery = true)
     void deleteById(@Param("id") Integer id);
+
+
+    @Query(value = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'tbl_author'", nativeQuery = true)
+    String[] getColumnNames();
 }

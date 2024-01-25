@@ -39,7 +39,7 @@ public class Book extends AuditActiveAbstract {
     private String photo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false, referencedColumnName = "id",
+    @JoinColumn(name = "category_id", referencedColumnName = "id",
             foreignKey = @ForeignKey(name = "FK_book_category"))
     private Category category;
 
