@@ -5,6 +5,8 @@ import com.bookrental.bookrental.pojo.returnn.BookReturnRequest;
 import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 
 public interface BookTransactionService {
@@ -21,4 +23,7 @@ public interface BookTransactionService {
     List<BookTransactionResponse> getAllTransactionByMember(Integer id);
 
     void save(MultipartFile file);
+
+    ByteArrayInputStream getExcelData() throws IOException;
+
 }

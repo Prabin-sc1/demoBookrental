@@ -5,8 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserResponsePojo {
-    private Integer id;
+public class ChangePasswordOTPRequest {
     private String email;
-    private String name;
+    private String newPassword;
 }

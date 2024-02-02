@@ -13,8 +13,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/author")
@@ -73,10 +81,10 @@ public class AuthorController extends MyBaseController {
             )
     )
     public ResponseEntity<GlobalApiResponse> getAuthor(@PathVariable Integer id) {
-        if(authorService.getAuthorById(id) != null) {
+        if (authorService.getAuthorById(id) != null) {
             return ResponseEntity.ok(successResponse(customMessageSource.get(Message.RETRIEVE.getCode(), module),
                     authorService.getAuthorById(id)));
-        }else {
+        } else {
             return ResponseEntity.ok(errorResponse(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), module),
                     null));
         }
@@ -92,5 +100,48 @@ public class AuthorController extends MyBaseController {
         authorService.deleteById(id);
         return ResponseEntity.ok(successResponse(customMessageSource.get(Message.DELETE.getCode(), module), null
         ));
+    }
+
+
+    @GetMapping("/download-excel-data")
+    @Operation(
+            summary = "Retrieve all authors in excel",
+            responses = {
+                    @ApiResponse(responseCode = "200", content = {@Content
+                            (array = @ArraySchema
+                                    (schema = @Schema(implementation = AuthorResponsePojo.class)))},
+                            description = "This end point fetch all authors"
+                    )
+            }
+    )
+    public ResponseEntity<Resource> download() throws IOException {
+        String fileName = "author.xlsx";
+        ByteArrayInputStream bis = authorService.getExcelData();
+        InputStreamResource file = new InputStreamResource(bis);
+
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=" + fileName)
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                .body(file);
+    }
+
+    @PostMapping("/upload-excel-data")
+    @Operation(
+            summary = "Upload author excel data",
+            description = "This end point used to upload excel data of author",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "success",
+                            content = {
+                                    @Content(schema = @Schema(implementation = MultipartFile.class))
+                            }
+                    ),
+                    @ApiResponse(responseCode = "400", description = "Bad Request"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized")
+            }
+    )
+    public ResponseEntity<GlobalApiResponse> saveTransaction(@RequestParam("file") MultipartFile multipartFile) {
+        authorService.save(multipartFile);
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),
+                null));
     }
 }

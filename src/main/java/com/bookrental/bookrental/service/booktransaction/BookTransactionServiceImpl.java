@@ -7,10 +7,7 @@ import com.bookrental.bookrental.enums.RentType;
 import com.bookrental.bookrental.exception.AppException;
 import com.bookrental.bookrental.helpers.Helper;
 import com.bookrental.bookrental.mapper.BookTransactionMapper;
-import com.bookrental.bookrental.model.Author;
-import com.bookrental.bookrental.model.Book;
-import com.bookrental.bookrental.model.BookTransaction;
-import com.bookrental.bookrental.model.Member;
+import com.bookrental.bookrental.model.*;
 import com.bookrental.bookrental.pojo.book.BookRequestPojo;
 import com.bookrental.bookrental.pojo.rent.BookRentRequest;
 import com.bookrental.bookrental.pojo.returnn.BookReturnRequest;
@@ -18,18 +15,23 @@ import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
 import com.bookrental.bookrental.repository.AuthorRepository;
 import com.bookrental.bookrental.repository.BookRepository;
 import com.bookrental.bookrental.repository.BookTransactionRepository;
+import com.bookrental.bookrental.repository.CategoryRepository;
 import com.bookrental.bookrental.service.book.BookService;
 import com.bookrental.bookrental.service.member.MemberService;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.cache.CacheType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -40,6 +42,7 @@ public class BookTransactionServiceImpl implements BookTransactionService {
     private final BookTransactionRepository bookTransactionRepository;
 
     private final BookRepository bookRepository;
+    private final CategoryRepository categoryRepository;
 
     private final NullAwareBeanUtilsBean beanUtils = new NullAwareBeanUtilsBean();
 
@@ -151,10 +154,28 @@ public class BookTransactionServiceImpl implements BookTransactionService {
 
     public void save(MultipartFile file) {
         try {
-            List<Author> list = Helper.convertExcelToList(Author.class, file.getInputStream());
-            this.authorRepository.saveAll(list);
+            List<Category> list = Helper.convertExcelToList(Category.class, file.getInputStream());
+            categoryRepository.saveAll(list);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public static String SHEET_NAME = "book_transaction";
+
+    public static String[] getHeaders(Class<?> className) {
+        List<String> headers = new ArrayList<>();
+        Field[] fields = className.getDeclaredFields();
+        for (Field field : fields) {
+            headers.add(field.getName());
+        }
+        return headers.toArray(new String[headers.size()]);
+    }
+
+    public ByteArrayInputStream getExcelData() throws IOException {
+        List<BookTransactionResponse> all = bookTransactionMapper.getAll();
+        ByteArrayInputStream byteArrayInputStream = Helper.dataToExcel(all, SHEET_NAME, getHeaders(BookTransactionResponse.class));
+        return byteArrayInputStream;
     }
 }

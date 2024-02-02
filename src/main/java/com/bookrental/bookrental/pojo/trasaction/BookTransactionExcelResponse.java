@@ -17,13 +17,18 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class BookTransactionResponse {
+public class BookTransactionExcelResponse {
     private Integer id;
     private String code;
     private LocalDate fromDate;
     private LocalDate toDate;
-    private String bookName;
-    private String memberName;
+        @JsonIgnore
+    private Integer bookId;
+    @JsonIgnore
+    private Integer memberId;
+//    private String bookName;
+//    private String memberName;
     @Enumerated(EnumType.STRING)
     private RentType rentStatus;
 }
+

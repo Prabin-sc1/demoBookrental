@@ -13,8 +13,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/member")
@@ -82,5 +90,48 @@ public class MemberController extends MyBaseController {
     public ResponseEntity<GlobalApiResponse> deleteById(@PathVariable Integer id) {
         memberService.deleteMember(id);
         return ResponseEntity.ok(successResponse(customMessageSource.get(Message.DELETE.getCode(), module), null));
+    }
+
+    @GetMapping("/member-excel-data")
+    @Operation(
+            summary = "Retrieve all members in excel",
+            responses = {
+                    @ApiResponse(responseCode = "200", content = {@Content
+                            (array = @ArraySchema
+                                    (schema = @Schema(implementation = MemberResponsePojo.class)))},
+                            description = "This end point fetch all members"
+                    )
+            }
+    )
+    public ResponseEntity<Resource> download() throws IOException {
+        String fileName = "member.xlsx";
+        ByteArrayInputStream bis = memberService.getExcelData();
+        InputStreamResource file = new InputStreamResource(bis);
+
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=" + fileName)
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                .body(file);
+    }
+
+
+    @PostMapping("/upload")
+    @Operation(
+            summary = "Upload member excel data",
+            description = "This end point used to upload excel data of member",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "success",
+                            content = {
+                                    @Content(schema = @Schema(implementation = MultipartFile.class))
+                            }
+                    ),
+                    @ApiResponse(responseCode = "400", description = "Bad Request"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized")
+            }
+    )
+    public ResponseEntity<GlobalApiResponse> saveTransaction(@RequestParam("file") MultipartFile multipartFile) {
+        memberService.save(multipartFile);
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),
+                null));
     }
 }

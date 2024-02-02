@@ -1,10 +1,9 @@
 package com.bookrental.bookrental.pojo.book;
 
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -34,8 +33,12 @@ public class BookRequestPojo {
     @NotNull(message = "Published date cannot be blank")
     @Past(message = "Published date must be in the past")
     private LocalDate publishedDate;
-    @NotBlank(message = "Photo URL cannot be blank")
-    private String photo;
+//    @NotBlank(message = "Photo URL cannot be blank")
+//    private String photo;
+
+    @NotNull(message = "Photo file cannot be blank")
+    private MultipartFile photo;
+
     @NotNull(message = "Category id can't be null")
     private Integer categoryId;
     @NotNull(message = "At least one author id is required")

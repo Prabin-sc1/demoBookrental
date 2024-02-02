@@ -21,3 +21,5 @@ server:
   servlet:
     context-path: /book-rental
 
+project:
+  images: C:\HobesIntern\BookRental\images
