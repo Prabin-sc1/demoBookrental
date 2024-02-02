@@ -4,6 +4,8 @@ public class ModuleNameConstants {
     public static final String MEMBER = "Member";
     public static final String CATEGORY = "Category";
     public static final String AUTHOR = "Author";
+    public static final String OTP = "OTP";
+    public static final String IMAGE = "Image";
     public static final String AUTH = "Auth";
     public static final String USER = "User";
     public static final String BOOK = "Book";

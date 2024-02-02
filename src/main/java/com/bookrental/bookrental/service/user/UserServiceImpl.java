@@ -4,20 +4,32 @@ import com.bookrental.bookrental.config.CustomMessageSource;
 import com.bookrental.bookrental.constants.ModuleNameConstants;
 import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.exception.AppException;
+import com.bookrental.bookrental.helpers.Helper;
 import com.bookrental.bookrental.mapper.UserMapper;
+import com.bookrental.bookrental.model.Author;
 import com.bookrental.bookrental.model.User;
+import com.bookrental.bookrental.pojo.ChangePasswordRequest;
+import com.bookrental.bookrental.pojo.user.ChangePasswordOTPRequest;
 import com.bookrental.bookrental.pojo.user.UserRequestPojo;
 import com.bookrental.bookrental.pojo.user.UserResponsePojo;
 import com.bookrental.bookrental.repository.UserRepository;
+import com.bookrental.bookrental.service.email.NewEmailService;
+import com.bookrental.bookrental.service.otp.OTPService;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -54,19 +66,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean changePassword(String oldPassword, String newPassword, Principal principal) {
-        String username = principal.getName();
-        User user = userRepository.findByEmail(username).orElseThrow(() ->
-                new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.USER)));
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            throw new AppException(customMessageSource.get(Message.PASSWORD_NOT_MATCH.getCode(), ModuleNameConstants.USER));
-        }
-        user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
-        return true;
-    }
-
-    @Override
     public UserResponsePojo getUserById(Integer id) {
         return userMapper.getSingleUser(id).orElseThrow(() -> new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.USER)));
     }
@@ -81,4 +80,34 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+
+    public static String SHEET_NAME = "author";
+
+    public static String[] getHeaders(Class<?> className) {
+        List<String> headers = new ArrayList<>();
+        Field[] fields = className.getDeclaredFields();
+        for (Field field : fields) {
+            headers.add(field.getName());
+        }
+        return headers.toArray(new String[headers.size()]);
+    }
+
+    public ByteArrayInputStream getExcelData() throws IOException {
+        List<UserResponsePojo> all = userMapper.allUser();
+        ByteArrayInputStream byteArrayInputStream = Helper.dataToExcel(all, SHEET_NAME, getHeaders(UserResponsePojo.class));
+        return byteArrayInputStream;
+    }
+
+    @Override
+    public Boolean changePassword(String oldPassword, String newPassword, Principal principal) {
+        String username = principal.getName();
+        User user = userRepository.findByEmail(username).orElseThrow(() ->
+                new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.USER)));
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new AppException(customMessageSource.get(Message.PASSWORD_NOT_MATCH.getCode(), ModuleNameConstants.USER));
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return true;
+    }
 }

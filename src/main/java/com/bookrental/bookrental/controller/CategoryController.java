@@ -13,9 +13,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/category")
@@ -38,9 +46,10 @@ public class CategoryController extends MyBaseController {
                     }
             )
     )
-    public ResponseEntity<Void> createCategory(@Valid @RequestBody CategoryRequestPojo categoryRequestPojo) {
+    public ResponseEntity<GlobalApiResponse> createCategory(@Valid @RequestBody CategoryRequestPojo categoryRequestPojo) {
         categoryService.createUpdateCateogory(categoryRequestPojo);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),
+                null));
     }
 
     @GetMapping
@@ -84,5 +93,25 @@ public class CategoryController extends MyBaseController {
     public ResponseEntity<GlobalApiResponse> deleteCategoryById(@PathVariable Integer id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.ok(successResponse(customMessageSource.get(Message.DELETE.getCode(), module), null));
+    }
+
+
+    @GetMapping("/category-excel-data")
+    public ResponseEntity<Resource> download() throws IOException {
+        String fileName = "category.xlsx";
+        ByteArrayInputStream bis = categoryService.getExcelData();
+        InputStreamResource file = new InputStreamResource(bis);
+
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=" + fileName)
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                .body(file);
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<GlobalApiResponse> saveTransaction(@RequestParam("file") MultipartFile multipartFile) {
+        categoryService.save(multipartFile);
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),
+                null));
     }
 }

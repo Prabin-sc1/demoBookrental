@@ -4,6 +4,7 @@ import com.bookrental.bookrental.config.CustomMessageSource;
 import com.bookrental.bookrental.constants.ModuleNameConstants;
 import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.exception.AppException;
+import com.bookrental.bookrental.helpers.Helper;
 import com.bookrental.bookrental.mapper.BookMapper;
 import com.bookrental.bookrental.model.Author;
 import com.bookrental.bookrental.model.Book;
@@ -14,13 +15,25 @@ import com.bookrental.bookrental.repository.AuthorRepository;
 import com.bookrental.bookrental.repository.BookRepository;
 import com.bookrental.bookrental.service.author.AuthorService;
 import com.bookrental.bookrental.service.category.CategoryService;
+import com.bookrental.bookrental.service.image.ImageService;
 import com.bookrental.bookrental.utils.NullAwareBeanUtilsBean;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,14 +45,17 @@ public class BookServiceImpl implements BookService {
 
     private final AuthorRepository authorRepository;
 
-
     private final CustomMessageSource customMessageSource;
 
     private final CategoryService categoryService;
 
+    private final ImageService imageService;
+
+    @Value("${project.images}")
+    private String path;
 
     @Override
-    public void createUpdateBook(BookRequestPojo book) {
+    public void createUpdateBook(BookRequestPojo book, MultipartFile file) {
         List<Author> authors;
         Book b = new Book();
 
@@ -67,6 +83,16 @@ public class BookServiceImpl implements BookService {
         } catch (DataIntegrityViolationException e) {
             throw new AppException(customMessageSource.get(Message.ALREADY_EXISTS.getCode(), ModuleNameConstants.BOOK));
         }
+
+        if (file != null && !file.isEmpty()) {
+            String originalFilename = file.getOriginalFilename();
+            Path filePath = Paths.get(path, originalFilename);
+            try {
+                Files.write(filePath, file.getBytes());
+            } catch (IOException e) {
+                throw new AppException(e.getMessage());
+            }
+        }
     }
 
     @Override
@@ -90,4 +116,38 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findById(id).orElseThrow(() ->
                 new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.BOOK)));
     }
+
+    public static String SHEET_NAME = "book";
+
+    public static String[] getHeaders(Class<?> className) {
+        List<String> headers = new ArrayList<>();
+        Field[] fields = className.getDeclaredFields();
+        for (Field field : fields) {
+            headers.add(field.getName());
+        }
+        return headers.toArray(new String[headers.size()]);
+    }
+
+    public ByteArrayInputStream getExcelData() throws IOException {
+        List<BookResponsePojo> all = bookMapper.getAllBook();
+        ByteArrayInputStream byteArrayInputStream = Helper.dataToExcel(all, SHEET_NAME, getHeaders(BookResponsePojo.class));
+        return byteArrayInputStream;
+    }
+
+    //start
+    public String upload(MultipartFile file) throws IOException {
+        String originalFilename = file.getOriginalFilename(); // abc.png
+        String randomID = UUID.randomUUID().toString();
+        String newFileName = randomID.concat(originalFilename.substring(originalFilename.lastIndexOf(".")));
+//      String filePath = path + File.separator + newFileName; // project/abc.png
+        String filePath = Paths.get(path, newFileName).toString();
+
+        File f = new File(path);
+        if (!f.exists()) {
+            f.mkdir();
+        }
+        Files.copy(file.getInputStream(), Paths.get(filePath));
+        return newFileName;
+    }
+    //end
 }

@@ -1,5 +1,6 @@
 package com.bookrental.bookrental.mapper;
 
+import com.bookrental.bookrental.pojo.trasaction.BookTransactionExcelResponse;
 import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -43,6 +44,6 @@ public interface BookTransactionMapper {
                 tbt.to_date < CURRENT_DATE and rent_status ='RENT'
             ORDER BY
                 from_date""")
-    List<BookTransactionResponse> overdeuList();
+    List<BookTransactionExcelResponse> overdeuList();
 }
 

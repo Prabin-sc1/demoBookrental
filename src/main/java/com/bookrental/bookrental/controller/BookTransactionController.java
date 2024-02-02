@@ -8,6 +8,7 @@ import com.bookrental.bookrental.pojo.rent.BookRentRequest;
 import com.bookrental.bookrental.pojo.returnn.BookReturnRequest;
 import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
 import com.bookrental.bookrental.service.booktransaction.BookTransactionService;
+import com.bookrental.bookrental.service.category.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,11 +16,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -28,8 +35,11 @@ import java.util.List;
 public class BookTransactionController extends MyBaseController {
     private final BookTransactionService bookTransactionService;
 
-    public BookTransactionController(BookTransactionService bookTransactionService) {
+    private final CategoryService categoryService;
+
+    public BookTransactionController(BookTransactionService bookTransactionService, CategoryService categoryService) {
         this.bookTransactionService = bookTransactionService;
+        this.categoryService = categoryService;
         this.module = ModuleNameConstants.TRANSACTION;
     }
 
@@ -48,12 +58,6 @@ public class BookTransactionController extends MyBaseController {
                 bookTransactionService.addBookTransaction(bookRentRequest)));
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<GlobalApiResponse> saveTransaction(@RequestParam("file") MultipartFile multipartFile) {
-        bookTransactionService.save(multipartFile);
-        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),
-                null));
-    }
 
 
     @PostMapping("/return")
@@ -125,6 +129,27 @@ public class BookTransactionController extends MyBaseController {
     )
     public ResponseEntity<List<BookTransactionResponse>> getAllTransactionByMemberId(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(bookTransactionService.getAllTransactionByMember(id));
+    }
+
+    @GetMapping("/transaction-excel-data")
+    public ResponseEntity<Resource> download() throws IOException {
+        String fileName = "transaction.xlsx";
+        ByteArrayInputStream bis = bookTransactionService.getExcelData();
+        InputStreamResource file = new InputStreamResource(bis);
+
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=" + fileName)
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                .body(file);
+    }
+
+
+
+    @PostMapping("/upload")
+    public ResponseEntity<GlobalApiResponse> saveTransaction(@RequestParam("file") MultipartFile multipartFile) {
+        bookTransactionService.save(multipartFile);
+        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),
+                null));
     }
 
 }

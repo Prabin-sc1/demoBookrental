@@ -35,7 +35,7 @@ public class Book extends AuditActiveAbstract {
     private Integer stockCount;
     private LocalDate publishedDate;
 
-    @Column(columnDefinition = "VARCHAR(200)")
+//    @Column(columnDefinition = "VARCHAR(200)")
     private String photo;
 
     @ManyToOne(fetch = FetchType.LAZY)

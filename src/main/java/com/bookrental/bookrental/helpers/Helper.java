@@ -24,9 +24,6 @@ import java.util.List;
 
 public class Helper {
 
-    public static String[] HEADERS = {"ID", "Code", "From Date", "To Date", "Book", "Member", "Rent Status"};
-    public static String SHEET_NAME = "book-transaction";
-
     /*public static ByteArrayInputStream dataToExcel(List<BookTransactionResponse> list) throws IOException {
         Workbook workbook = new XSSFWorkbook();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -204,6 +201,7 @@ public class Helper {
 
                     // Set the value of the field
                     field.setAccessible(true);
+
                     switch (field.getType().getSimpleName()) {
                         case "int":
                             field.setInt(object, (int) cell.getNumericCellValue());

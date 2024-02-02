@@ -1,5 +1,6 @@
 package com.bookrental.bookrental.repository;
 
+import com.bookrental.bookrental.model.Book;
 import com.bookrental.bookrental.model.Member;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,7 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 
     @Query(value = "select * from tbl_member where email = :email ", nativeQuery = true)
     Member findByEmail(@Param("email") String email);
+
+
+    Member findByName(String name);
 }
