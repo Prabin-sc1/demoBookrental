@@ -1,3 +1,4 @@
+/*
 package com.bookrental.bookrental.controller;
 
 import com.bookrental.bookrental.constants.ModuleNameConstants;
@@ -44,3 +45,4 @@ public class ImageController extends MyBaseController {
     }
 
 }
+*/

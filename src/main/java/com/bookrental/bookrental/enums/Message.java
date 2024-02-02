@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Message {
     SAVE("success.save"),
+    TOKEN_GENERATE("token.generate"),
     RETRIEVE("success.retrieve"),
     RETRIVE_ALL("success.retrieve.all"),
     UPDATE("success.update"),

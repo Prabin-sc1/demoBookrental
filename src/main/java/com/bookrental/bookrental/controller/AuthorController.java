@@ -103,7 +103,17 @@ public class AuthorController extends MyBaseController {
     }
 
 
-    @GetMapping("/author-excel-data")
+    @GetMapping("/download-excel-data")
+    @Operation(
+            summary = "Retrieve all authors in excel",
+            responses = {
+                    @ApiResponse(responseCode = "200", content = {@Content
+                            (array = @ArraySchema
+                                    (schema = @Schema(implementation = AuthorResponsePojo.class)))},
+                            description = "This end point fetch all authors"
+                    )
+            }
+    )
     public ResponseEntity<Resource> download() throws IOException {
         String fileName = "author.xlsx";
         ByteArrayInputStream bis = authorService.getExcelData();
@@ -114,7 +124,21 @@ public class AuthorController extends MyBaseController {
                 .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                 .body(file);
     }
-    @PostMapping("/upload")
+
+    @PostMapping("/upload-excel-data")
+    @Operation(
+            summary = "Upload author excel data",
+            description = "This end point used to upload excel data of author",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "success",
+                            content = {
+                                    @Content(schema = @Schema(implementation = MultipartFile.class))
+                            }
+                    ),
+                    @ApiResponse(responseCode = "400", description = "Bad Request"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized")
+            }
+    )
     public ResponseEntity<GlobalApiResponse> saveTransaction(@RequestParam("file") MultipartFile multipartFile) {
         authorService.save(multipartFile);
         return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),

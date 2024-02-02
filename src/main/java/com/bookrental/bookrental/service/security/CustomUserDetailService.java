@@ -20,8 +20,8 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // here we load user from datebase
+        // here we load user from database
         return userRepository.findByEmail(username).orElseThrow(() ->
-                new AppException(customMessageSource.get(Message.ID_NOT_FOUND.getCode(), ModuleNameConstants.USER)));
+                new AppException(customMessageSource.get(Message.USER_NOT_FOUND.getCode(), ModuleNameConstants.USER)));
     }
 }

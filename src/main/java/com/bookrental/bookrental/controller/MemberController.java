@@ -93,6 +93,16 @@ public class MemberController extends MyBaseController {
     }
 
     @GetMapping("/member-excel-data")
+    @Operation(
+            summary = "Retrieve all members in excel",
+            responses = {
+                    @ApiResponse(responseCode = "200", content = {@Content
+                            (array = @ArraySchema
+                                    (schema = @Schema(implementation = MemberResponsePojo.class)))},
+                            description = "This end point fetch all members"
+                    )
+            }
+    )
     public ResponseEntity<Resource> download() throws IOException {
         String fileName = "member.xlsx";
         ByteArrayInputStream bis = memberService.getExcelData();
@@ -106,6 +116,19 @@ public class MemberController extends MyBaseController {
 
 
     @PostMapping("/upload")
+    @Operation(
+            summary = "Upload member excel data",
+            description = "This end point used to upload excel data of member",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "success",
+                            content = {
+                                    @Content(schema = @Schema(implementation = MultipartFile.class))
+                            }
+                    ),
+                    @ApiResponse(responseCode = "400", description = "Bad Request"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized")
+            }
+    )
     public ResponseEntity<GlobalApiResponse> saveTransaction(@RequestParam("file") MultipartFile multipartFile) {
         memberService.save(multipartFile);
         return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),

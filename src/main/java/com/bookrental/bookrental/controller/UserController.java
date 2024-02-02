@@ -6,6 +6,7 @@ import com.bookrental.bookrental.generic.GlobalApiResponse;
 import com.bookrental.bookrental.pojo.ChangePasswordRequest;
 import com.bookrental.bookrental.pojo.EmailRequest;
 import com.bookrental.bookrental.pojo.VerifyOTPRequest;
+import com.bookrental.bookrental.pojo.member.MemberResponsePojo;
 import com.bookrental.bookrental.pojo.user.UserRequestPojo;
 import com.bookrental.bookrental.pojo.user.UserResponsePojo;
 import com.bookrental.bookrental.service.otp.OTPService;
@@ -77,6 +78,7 @@ public class UserController extends MyBaseController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(
             summary = "Retrieve all user",
             responses = {
@@ -92,6 +94,7 @@ public class UserController extends MyBaseController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(
             summary = "Get user by id",
             description = "This end point can be used for getting user by id",
@@ -108,6 +111,7 @@ public class UserController extends MyBaseController {
 
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(
             summary = "Delete user",
             description = "This end point used to delete user",
@@ -121,7 +125,18 @@ public class UserController extends MyBaseController {
     }
 
 
-    @GetMapping("/user-excel-data")
+    @GetMapping("/download-excel-data")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(
+            summary = "Retrieve all users in excel",
+            responses = {
+                    @ApiResponse(responseCode = "200", content = {@Content
+                            (array = @ArraySchema
+                                    (schema = @Schema(implementation = UserResponsePojo.class)))},
+                            description = "This end point fetch all users"
+                    )
+            }
+    )
     public ResponseEntity<Resource> download() throws IOException {
         String fileName = "user.xlsx";
         ByteArrayInputStream bis = userService.getExcelData();
@@ -133,19 +148,15 @@ public class UserController extends MyBaseController {
                 .body(file);
     }
 
-    /*@PostMapping("/generate-otp")
-    public ResponseEntity<GlobalApiResponse> sendOTP(@RequestBody String email) {
-        int otp = userService.generateOTP(email);
-        return ResponseEntity.ok(successResponse(customMessageSource.get(Message.PASSWORD_UPDATE.getCode(), module), otp));
-    }*/
-
-    @PostMapping("/generate-otp")
+    @PostMapping("/forgot-password")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<GlobalApiResponse> sendOTP(@RequestBody EmailRequest request) {
         return ResponseEntity.ok(successResponse(customMessageSource.get(Message.GENERATE_OTP.getCode(), module),
                 otpService.generateAndStore(request.getEmail())));
     }
 
     @PostMapping("/verify-otp")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<GlobalApiResponse> verifyOTP(@RequestBody VerifyOTPRequest request) {
         if (otpService.verifyOTP(request.getEmail(), request.getOtp(), request.getNewPassword())) {
             return ResponseEntity.ok(successResponse(customMessageSource.get(Message.GENERATE_OTP.getCode(), module),

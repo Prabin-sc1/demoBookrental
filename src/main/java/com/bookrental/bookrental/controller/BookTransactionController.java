@@ -4,6 +4,7 @@ import com.bookrental.bookrental.constants.ModuleNameConstants;
 import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.generic.GlobalApiResponse;
 import com.bookrental.bookrental.model.BookTransaction;
+import com.bookrental.bookrental.pojo.author.AuthorResponsePojo;
 import com.bookrental.bookrental.pojo.rent.BookRentRequest;
 import com.bookrental.bookrental.pojo.returnn.BookReturnRequest;
 import com.bookrental.bookrental.pojo.trasaction.BookTransactionResponse;
@@ -57,7 +58,6 @@ public class BookTransactionController extends MyBaseController {
         return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),
                 bookTransactionService.addBookTransaction(bookRentRequest)));
     }
-
 
 
     @PostMapping("/return")
@@ -131,7 +131,17 @@ public class BookTransactionController extends MyBaseController {
         return ResponseEntity.ok(bookTransactionService.getAllTransactionByMember(id));
     }
 
-    @GetMapping("/transaction-excel-data")
+    @GetMapping("/download-excel-data")
+    @Operation(
+            summary = "Retrieve all transaction in excel",
+            responses = {
+                    @ApiResponse(responseCode = "200", content = {@Content
+                            (array = @ArraySchema
+                                    (schema = @Schema(implementation = BookTransactionResponse.class)))},
+                            description = "This end point fetch all transaction"
+                    )
+            }
+    )
     public ResponseEntity<Resource> download() throws IOException {
         String fileName = "transaction.xlsx";
         ByteArrayInputStream bis = bookTransactionService.getExcelData();
@@ -143,13 +153,10 @@ public class BookTransactionController extends MyBaseController {
                 .body(file);
     }
 
-
-
-    @PostMapping("/upload")
+    /*@PostMapping("/upload")
     public ResponseEntity<GlobalApiResponse> saveTransaction(@RequestParam("file") MultipartFile multipartFile) {
         bookTransactionService.save(multipartFile);
         return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),
                 null));
-    }
-
+    }*/
 }

@@ -3,6 +3,7 @@ package com.bookrental.bookrental.controller;
 import com.bookrental.bookrental.constants.ModuleNameConstants;
 import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.generic.GlobalApiResponse;
+import com.bookrental.bookrental.pojo.author.AuthorResponsePojo;
 import com.bookrental.bookrental.pojo.book.BookRequestPojo;
 import com.bookrental.bookrental.pojo.book.BookResponsePojo;
 import com.bookrental.bookrental.service.book.BookService;
@@ -105,7 +106,17 @@ public class BookController extends MyBaseController {
     }
 
 
-    @GetMapping("/book-excel-data")
+    @GetMapping("/download-excel-data")
+    @Operation(
+            summary = "Retrieve all books in excel",
+            responses = {
+                    @ApiResponse(responseCode = "200", content = {@Content
+                            (array = @ArraySchema
+                                    (schema = @Schema(implementation = BookResponsePojo.class)))},
+                            description = "This end point fetch all books"
+                    )
+            }
+    )
     public ResponseEntity<Resource> download() throws IOException {
         String fileName = "book.xlsx";
         ByteArrayInputStream bis = bookService.getExcelData();

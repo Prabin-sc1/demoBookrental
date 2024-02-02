@@ -3,6 +3,7 @@ package com.bookrental.bookrental.controller;
 import com.bookrental.bookrental.constants.ModuleNameConstants;
 import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.generic.GlobalApiResponse;
+import com.bookrental.bookrental.pojo.author.AuthorResponsePojo;
 import com.bookrental.bookrental.pojo.category.CategoryRequestPojo;
 import com.bookrental.bookrental.pojo.category.CategoryResponsePojo;
 import com.bookrental.bookrental.service.category.CategoryService;
@@ -96,7 +97,17 @@ public class CategoryController extends MyBaseController {
     }
 
 
-    @GetMapping("/category-excel-data")
+    @GetMapping("/download-excel-data")
+    @Operation(
+            summary = "Retrieve all categories in excel",
+            responses = {
+                    @ApiResponse(responseCode = "200", content = {@Content
+                            (array = @ArraySchema
+                                    (schema = @Schema(implementation = CategoryResponsePojo.class)))},
+                            description = "This end point fetch all categories"
+                    )
+            }
+    )
     public ResponseEntity<Resource> download() throws IOException {
         String fileName = "category.xlsx";
         ByteArrayInputStream bis = categoryService.getExcelData();
@@ -109,6 +120,19 @@ public class CategoryController extends MyBaseController {
     }
 
     @PostMapping("/upload")
+    @Operation(
+            summary = "Upload category excel data",
+            description = "This end point used to upload excel data of category",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "success",
+                            content = {
+                                    @Content(schema = @Schema(implementation = MultipartFile.class))
+                            }
+                    ),
+                    @ApiResponse(responseCode = "400", description = "Bad Request"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized")
+            }
+    )
     public ResponseEntity<GlobalApiResponse> saveTransaction(@RequestParam("file") MultipartFile multipartFile) {
         categoryService.save(multipartFile);
         return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),
