@@ -55,7 +55,7 @@ public class BookServiceImpl implements BookService {
     private String path;
 
     @Override
-    public void createUpdateBook(BookRequestPojo book, MultipartFile file) {
+    public void createUpdateBook(BookRequestPojo book) {
         List<Author> authors;
         Book b = new Book();
 
@@ -84,7 +84,7 @@ public class BookServiceImpl implements BookService {
             throw new AppException(customMessageSource.get(Message.ALREADY_EXISTS.getCode(), ModuleNameConstants.BOOK));
         }
 
-        if (file != null && !file.isEmpty()) {
+        /*if (file != null && !file.isEmpty()) {
             String originalFilename = file.getOriginalFilename();
             Path filePath = Paths.get(path, originalFilename);
             try {
@@ -92,7 +92,7 @@ public class BookServiceImpl implements BookService {
             } catch (IOException e) {
                 throw new AppException(e.getMessage());
             }
-        }
+        }*/
     }
 
     @Override
