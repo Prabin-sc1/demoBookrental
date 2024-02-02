@@ -3,7 +3,6 @@ package com.bookrental.bookrental.controller;
 import com.bookrental.bookrental.constants.ModuleNameConstants;
 import com.bookrental.bookrental.enums.Message;
 import com.bookrental.bookrental.generic.GlobalApiResponse;
-import com.bookrental.bookrental.pojo.author.AuthorResponsePojo;
 import com.bookrental.bookrental.pojo.book.BookRequestPojo;
 import com.bookrental.bookrental.pojo.book.BookResponsePojo;
 import com.bookrental.bookrental.service.book.BookService;
@@ -25,10 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/book")
@@ -56,9 +51,8 @@ public class BookController extends MyBaseController {
                     }
             )
     )
-    public ResponseEntity<GlobalApiResponse> create(@Valid @ModelAttribute BookRequestPojo bookRequestPojo,
-                                                    @RequestParam("photo") MultipartFile file) throws IOException {
-        bookService.createUpdateBook(bookRequestPojo, file);
+    public ResponseEntity<GlobalApiResponse> create(@Valid @RequestBody BookRequestPojo bookRequestPojo) {
+        bookService.createUpdateBook(bookRequestPojo);
         return ResponseEntity.ok(successResponse(customMessageSource.get(Message.SAVE.getCode(), module),
                 null));
     }

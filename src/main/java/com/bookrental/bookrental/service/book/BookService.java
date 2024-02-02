@@ -10,7 +10,8 @@ import java.io.IOException;
 import java.util.List;
 
 public interface BookService {
-    void createUpdateBook(BookRequestPojo book, MultipartFile file);
+//    void createUpdateBook(BookRequestPojo book, MultipartFile file);
+    void createUpdateBook(BookRequestPojo book);
 
     void deleteBook(Integer id);
 
